@@ -1,20 +1,43 @@
-import { MessageForm } from "./message-form"
+import { cn } from "@/lib/utils"
+import { Playfair_Display } from "next/font/google"
+import { MessageButton } from "./message-button"
 import { MessageList } from "./message-list"
 
-export default async function MuralPage() {
+const playfair = Playfair_Display({ subsets: ["latin"] })
 
+export default async function MuralPage() {
   return (
     <main className="container mx-auto py-10 px-4">
-      <h1 className="text-4xl font-bold text-pink-800 text-center mb-10">Mural de Mensagens para Piettra</h1>
-
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-10">
-          <h2 className="text-2xl font-semibold text-pink-700 mb-4">Deixe sua mensagem</h2>
-          <MessageForm />
+      <div className="max-w-4xl mx-auto">
+        {/* Cabeçalho com estilo elegante */}
+        <div className="text-center mb-12">
+          <div className="mb-4 flex justify-center">
+            <div className="w-20 h-1 bg-gradient-to-r from-pink-300 to-pink-600"></div>
+          </div>
+          <h1
+            className={cn(
+              playfair.className,
+              "text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-700 to-pink-900 bg-clip-text text-transparent mb-4",
+            )}
+          >
+            Mural de Mensagens
+          </h1>
+          <p className="text-lg text-pink-600 italic max-w-2xl mx-auto">
+            Deixe uma mensagem especial para a Piettra neste dia tão importante. Suas palavras ficarão guardadas para
+            sempre em suas memórias.
+          </p>
         </div>
 
+        {/* Botão centralizado para abrir o modal de mensagem */}
+        <div className="flex justify-center mb-16">
+          <MessageButton />
+        </div>
+
+        {/* Lista de mensagens */}
         <div className="mt-10">
-          <h2 className="text-2xl font-semibold text-pink-700 mb-6">Mensagens dos Convidados</h2>
+          <h2 className={cn(playfair.className, "text-2xl font-semibold text-pink-800 mb-8 text-center")}>
+            Mensagens dos Convidados
+          </h2>
           <MessageList />
         </div>
       </div>

@@ -1,11 +1,12 @@
-import SignInButton from "@/components/signin-button"
 import { Button } from "@/components/ui/button"
 import getSession from "@/lib/get-session"
 import { cn } from "@/lib/utils"
-import { Playfair_Display } from 'next/font/google'
+import { Calendar, Clock, MapPin, Shirt } from "lucide-react"
+import { Playfair_Display } from "next/font/google"
 import Image from "next/image"
 import Link from "next/link"
 import Countdown from "./count-down"
+import { LoginButton } from "@/components/login-button"
 
 // Importando fonte elegante para títulos
 const playfair = Playfair_Display({ subsets: ["latin"] })
@@ -32,10 +33,12 @@ export default async function Home() {
               <div className="w-20 h-1 bg-gradient-to-r from-pink-300 to-pink-600"></div>
             </div>
 
-            <h1 className={cn(
-              playfair.className,
-              "text-5xl md:text-6xl lg:text-7xl font-bold text-pink-800 mb-6 leading-tight"
-            )}>
+            <h1
+              className={cn(
+                playfair.className,
+                "text-5xl md:text-6xl lg:text-7xl font-bold text-pink-800 mb-6 leading-tight",
+              )}
+            >
               Festa de 15 Anos da Piettra
             </h1>
 
@@ -46,16 +49,25 @@ export default async function Home() {
             <div className="flex flex-col sm:flex-row justify-center gap-4 mb-10">
               {session ? (
                 <>
-                  <Button asChild size="lg" className="bg-pink-600 hover:bg-pink-700 shadow-lg transition-all duration-300 hover:translate-y-[-2px]">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 rounded-full px-8 shadow-md hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px] border-none"
+                  >
                     <Link href="/mural">Deixar uma Mensagem</Link>
                   </Button>
-                  <Button asChild size="lg" className="bg-pink-600 hover:bg-pink-700 shadow-lg transition-all duration-300 hover:translate-y-[-2px]">
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="border-2 border-pink-500 text-pink-600 hover:bg-pink-50 rounded-full px-8 shadow-sm hover:shadow transition-all duration-300 hover:translate-y-[-2px]"
+                  >
                     <Link href="/fotos">Ver Fotos</Link>
                   </Button>
                 </>
               ) : (
                 <div className="transform hover:scale-105 transition-transform duration-300">
-                  <SignInButton />
+                  <LoginButton />
                 </div>
               )}
             </div>
@@ -67,10 +79,7 @@ export default async function Home() {
       <section className="container mx-auto py-20 px-4 text-center relative">
         <div className="absolute inset-0 bg-[url('/placeholder.svg?key=s71lj')] bg-cover opacity-5"></div>
         <div className="relative z-10">
-          <h2 className={cn(
-            playfair.className,
-            "text-3xl md:text-4xl font-bold text-pink-800 mb-4"
-          )}>
+          <h2 className={cn(playfair.className, "text-3xl md:text-4xl font-bold text-pink-800 mb-4")}>
             Contagem Regressiva
           </h2>
           <p className="text-pink-600 italic mb-10 max-w-xl mx-auto">
@@ -88,44 +97,50 @@ export default async function Home() {
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div className="order-2 md:order-1">
             <div className="mb-4 w-16 h-1 bg-gradient-to-r from-pink-300 to-pink-600"></div>
-            <h2 className={cn(
-              playfair.className,
-              "text-3xl md:text-4xl font-bold text-pink-800 mb-6"
-            )}>
+            <h2 className={cn(playfair.className, "text-3xl md:text-4xl font-bold text-pink-800 mb-6")}>
               Sobre a Festa
             </h2>
             <div className="space-y-6 text-gray-700">
               <p className="text-lg">
-                Junte-se a nós para celebrar os 15 anos da Piettra em grande estilo! Uma noite inesquecível com música, dança e muita alegria.
+                Junte-se a nós para celebrar os 15 anos da Piettra em grande estilo! Uma noite inesquecível com música,
+                dança e muita alegria.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-white bg-opacity-70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-pink-100 transform transition-transform duration-300 hover:translate-y-[-5px]">
+                <div className="bg-white bg-opacity-70 backdrop-blur-sm p-6 rounded-xl shadow-md border border-pink-100 transform transition-transform duration-300 hover:translate-y-[-5px]">
                   <div className="flex items-center mb-2">
-                    <div className="w-2 h-2 rounded-full bg-pink-500 mr-2"></div>
+                    <div className="w-8 h-8 rounded-full bg-pink-50 flex items-center justify-center text-pink-600 mr-3">
+                      <Calendar className="h-4 w-4" />
+                    </div>
                     <h3 className="font-semibold text-pink-700">Data</h3>
                   </div>
-                  <p className="text-gray-700 pl-4">15 de Junho de 2025</p>
+                  <p className="text-gray-700 pl-11">15 de Junho de 2025</p>
                 </div>
-                <div className="bg-white bg-opacity-70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-pink-100 transform transition-transform duration-300 hover:translate-y-[-5px]">
+                <div className="bg-white bg-opacity-70 backdrop-blur-sm p-6 rounded-xl shadow-md border border-pink-100 transform transition-transform duration-300 hover:translate-y-[-5px]">
                   <div className="flex items-center mb-2">
-                    <div className="w-2 h-2 rounded-full bg-pink-500 mr-2"></div>
+                    <div className="w-8 h-8 rounded-full bg-pink-50 flex items-center justify-center text-pink-600 mr-3">
+                      <Clock className="h-4 w-4" />
+                    </div>
                     <h3 className="font-semibold text-pink-700">Horário</h3>
                   </div>
-                  <p className="text-gray-700 pl-4">19:00 - 02:00</p>
+                  <p className="text-gray-700 pl-11">19:00 - 02:00</p>
                 </div>
-                <div className="bg-white bg-opacity-70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-pink-100 transform transition-transform duration-300 hover:translate-y-[-5px]">
+                <div className="bg-white bg-opacity-70 backdrop-blur-sm p-6 rounded-xl shadow-md border border-pink-100 transform transition-transform duration-300 hover:translate-y-[-5px]">
                   <div className="flex items-center mb-2">
-                    <div className="w-2 h-2 rounded-full bg-pink-500 mr-2"></div>
+                    <div className="w-8 h-8 rounded-full bg-pink-50 flex items-center justify-center text-pink-600 mr-3">
+                      <MapPin className="h-4 w-4" />
+                    </div>
                     <h3 className="font-semibold text-pink-700">Local</h3>
                   </div>
-                  <p className="text-gray-700 pl-4">Salão de Festas Elegance</p>
+                  <p className="text-gray-700 pl-11">Salão de Festas Elegance</p>
                 </div>
-                <div className="bg-white bg-opacity-70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-pink-100 transform transition-transform duration-300 hover:translate-y-[-5px]">
+                <div className="bg-white bg-opacity-70 backdrop-blur-sm p-6 rounded-xl shadow-md border border-pink-100 transform transition-transform duration-300 hover:translate-y-[-5px]">
                   <div className="flex items-center mb-2">
-                    <div className="w-2 h-2 rounded-full bg-pink-500 mr-2"></div>
+                    <div className="w-8 h-8 rounded-full bg-pink-50 flex items-center justify-center text-pink-600 mr-3">
+                      <Shirt className="h-4 w-4" />
+                    </div>
                     <h3 className="font-semibold text-pink-700">Traje</h3>
                   </div>
-                  <p className="text-gray-700 pl-4">Esporte Fino</p>
+                  <p className="text-gray-700 pl-11">Esporte Fino</p>
                 </div>
               </div>
             </div>
@@ -133,12 +148,7 @@ export default async function Home() {
           <div className="order-1 md:order-2">
             <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
               <div className="absolute inset-0 border-8 border-white z-10 rounded-2xl"></div>
-              <Image
-                src="/placeholder.svg?key=geus4"
-                alt="Piettra"
-                fill
-                className="object-cover"
-              />
+              <Image src="/placeholder.svg?key=geus4" alt="Piettra" fill className="object-cover" />
             </div>
           </div>
         </div>
@@ -151,10 +161,7 @@ export default async function Home() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col items-center mb-12">
             <div className="w-16 h-1 bg-gradient-to-r from-pink-300 to-pink-600 mb-4"></div>
-            <h2 className={cn(
-              playfair.className,
-              "text-3xl md:text-4xl font-bold text-pink-800 mb-4 text-center"
-            )}>
+            <h2 className={cn(playfair.className, "text-3xl md:text-4xl font-bold text-pink-800 mb-4 text-center")}>
               Momentos Especiais
             </h2>
             <p className="text-pink-600 italic text-center max-w-xl">
@@ -166,11 +173,11 @@ export default async function Home() {
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="group relative h-80 rounded-lg overflow-hidden shadow-xl transform transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+                className="group relative h-80 rounded-xl overflow-hidden shadow-xl transform transition-all duration-500 hover:scale-105 hover:shadow-2xl"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-pink-900/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
                 <Image
-                  src={`/placeholder.svg?key=3uk46&height=400&width=300&query=elegant teenage girl celebration moment ${i}`}
+                  src={`/placeholder.svg?key=5qqhq&key=3uk46&height=400&width=300&query=elegant teenage girl celebration moment ${i}`}
                   alt={`Momento ${i}`}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -186,11 +193,10 @@ export default async function Home() {
           <div className="text-center mt-12">
             <Button
               asChild
-              variant="outline"
               size="lg"
-              className="border-2 border-pink-600 text-pink-600 hover:bg-pink-50 shadow-md hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px]"
+              className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 rounded-full px-8 shadow-md hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px] border-none"
             >
-              <Link href="/fotos">Ver Mais Fotos</Link>
+              <Link href="/fotos">Ver Galeria Completa</Link>
             </Button>
           </div>
         </div>
@@ -199,12 +205,10 @@ export default async function Home() {
       {/* Nova seção: Citação */}
       <section className="container mx-auto py-20 px-4 text-center">
         <div className="max-w-3xl mx-auto">
-          <div className="text-5xl text-pink-300 mb-6"></div>
-          <p className={cn(
-            playfair.className,
-            "text-xl md:text-2xl text-pink-800 italic mb-6"
-          )}>
-            Quinze anos é o momento em que deixamos para trás a infância e começamos a escrever nossa própria história. É um marco que celebramos com aqueles que amamos.
+          <div className="text-5xl text-pink-300 mb-6">"</div>
+          <p className={cn(playfair.className, "text-xl md:text-2xl text-pink-800 italic mb-6")}>
+            Quinze anos é o momento em que deixamos para trás a infância e começamos a escrever nossa própria história.
+            É um marco que celebramos com aqueles que amamos.
           </p>
           <div className="w-16 h-1 bg-pink-300 mx-auto mb-4"></div>
           <p className="text-pink-600 font-medium">Piettra</p>

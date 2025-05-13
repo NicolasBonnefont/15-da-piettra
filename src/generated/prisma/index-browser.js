@@ -169,6 +169,8 @@ exports.Prisma.VerificationScalarFieldEnum = {
 exports.Prisma.MessageScalarFieldEnum = {
   id: 'id',
   content: 'content',
+  stickerId: 'stickerId',
+  imageUrl: 'imageUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId'
@@ -190,6 +192,24 @@ exports.Prisma.CommentScalarFieldEnum = {
   updatedAt: 'updatedAt',
   photoId: 'photoId',
   userId: 'userId'
+};
+
+exports.Prisma.LikeScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  photoId: 'photoId',
+  userId: 'userId'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  message: 'message',
+  read: 'read',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  actorId: 'actorId',
+  photoId: 'photoId'
 };
 
 exports.Prisma.SortOrder = {
@@ -238,6 +258,8 @@ exports.Prisma.VerificationOrderByRelevanceFieldEnum = {
 exports.Prisma.MessageOrderByRelevanceFieldEnum = {
   id: 'id',
   content: 'content',
+  stickerId: 'stickerId',
+  imageUrl: 'imageUrl',
   userId: 'userId'
 };
 
@@ -255,6 +277,21 @@ exports.Prisma.CommentOrderByRelevanceFieldEnum = {
   userId: 'userId'
 };
 
+exports.Prisma.LikeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  photoId: 'photoId',
+  userId: 'userId'
+};
+
+exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  type: 'type',
+  message: 'message',
+  userId: 'userId',
+  actorId: 'actorId',
+  photoId: 'photoId'
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',
@@ -263,7 +300,9 @@ exports.Prisma.ModelName = {
   Verification: 'Verification',
   Message: 'Message',
   Photo: 'Photo',
-  Comment: 'Comment'
+  Comment: 'Comment',
+  Like: 'Like',
+  Notification: 'Notification'
 };
 
 /**

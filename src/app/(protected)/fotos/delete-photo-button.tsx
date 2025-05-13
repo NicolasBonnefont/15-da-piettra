@@ -1,5 +1,4 @@
 "use client"
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,8 +10,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { Trash2 } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Download, MoreHorizontal, Share2, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 import { deletePhoto } from "./actions"
@@ -34,31 +39,59 @@ export function DeletePhotoButton({ photoId }: { photoId: string }) {
   }
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="text-pink-700 hover:text-pink-800 hover:bg-pink-50">
-          <Trash2 className="h-5 w-5" />
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent className="border-pink-100">
-        <AlertDialogHeader>
-          <AlertDialogTitle>Excluir foto</AlertDialogTitle>
-          <AlertDialogDescription>
-            Tem certeza que deseja excluir esta foto? Esta ação não pode ser desfeita e todos os comentários serão
-            excluídos.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel className="border-pink-200 text-pink-700">Cancelar</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={handleDelete}
-            disabled={isDeleting}
-            className="bg-pink-600 hover:bg-pink-700 text-white"
-          >
-            {isDeleting ? "Excluindo..." : "Excluir"}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="text-gray-500 hover:text-gray-700">
+          <MoreHorizontal className="h-5 w-5" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => document.getElementById(`share-${photoId}`)?.click()}
+        >
+          <Share2 className="mr-2 h-4 w-4" />
+          <span>Compartilhar</span>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => document.getElementById(`download-${photoId}`)?.click()}
+        >
+          <Download className="mr-2 h-4 w-4" />
+          <span>Baixar</span>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <DropdownMenuItem className="cursor-pointer text-red-600" onSelect={(e) => e.preventDefault()}>
+              <Trash2 className="mr-2 h-4 w-4" />
+              <span>Excluir</span>
+            </DropdownMenuItem>
+          </AlertDialogTrigger>
+          <AlertDialogContent className="border-pink-100">
+            <AlertDialogHeader>
+              <AlertDialogTitle>Excluir foto</AlertDialogTitle>
+              <AlertDialogDescription>
+                Tem certeza que deseja excluir esta foto? Esta ação não pode ser desfeita e todos os comentários serão
+                excluídos.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="border-pink-200 text-pink-700">Cancelar</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="bg-pink-600 hover:bg-pink-700 text-white"
+              >
+                {isDeleting ? "Excluindo..." : "Excluir"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

@@ -8,11 +8,16 @@ import type React from "react"
 
 import { isHeicImage } from "@/lib/utils"
 import imageCompression from "browser-image-compression"
+import { ImagePlus, Loader2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 import { uploadPhoto } from "./actions"
 
-export function PhotoUploadForm() {
+interface PhotoUploadFormProps {
+  onSuccess?: () => void
+}
+
+export function PhotoUploadForm({ onSuccess }: PhotoUploadFormProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [caption, setCaption] = useState("")
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -96,6 +101,11 @@ export function PhotoUploadForm() {
       setPreviewUrl(null)
 
       toast.success("Sua foto foi enviada com sucesso.")
+
+      // Chamar callback de sucesso se fornecido
+      if (onSuccess) {
+        onSuccess()
+      }
     } catch {
       toast.error("Não foi possível enviar sua foto. Tente novamente.")
     } finally {
@@ -105,35 +115,78 @@ export function PhotoUploadForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="photo">Selecione uma foto</Label>
-        <Input id="photo" type="file" accept="image/*" onChange={handleFileChange} className="border-pink-200" />
-      </div>
-
-      {previewUrl && (
-        <div className="mt-4">
-          <img
-            src={previewUrl || "/placeholder.svg"}
-            alt="Preview"
-            className="max-h-60 rounded-lg object-contain mx-auto"
+      {!previewUrl ? (
+        <label
+          htmlFor="photo"
+          className="block border-2 border-dashed border-pink-200 rounded-lg p-8 text-center cursor-pointer transition hover:border-pink-400 focus-within:border-pink-500"
+          tabIndex={0}
+        >
+          <div className="flex flex-col items-center justify-center gap-3 pointer-events-none">
+            <ImagePlus className="h-10 w-10 text-pink-400" />
+            <div className="text-sm text-gray-600">
+              <span className="text-pink-600 font-medium">Clique para selecionar</span>
+            </div>
+          </div>
+          <Input
+            id="photo"
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+            tabIndex={-1}
           />
+        </label>
+      ) : (
+        <div className="space-y-4">
+          <div className="relative rounded-lg overflow-hidden">
+            <img
+              src={previewUrl || "/placeholder.svg"}
+              alt="Preview"
+              className="max-h-80 w-full object-contain mx-auto bg-gray-50"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="absolute top-2 right-2 bg-white/80 hover:bg-white"
+              onClick={() => {
+                setSelectedFile(null)
+                setPreviewUrl(null)
+              }}
+            >
+              Trocar
+            </Button>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="caption">Legenda (opcional)</Label>
+            <Textarea
+              id="caption"
+              placeholder="Adicione uma legenda para sua foto..."
+              value={caption}
+              onChange={(e) => setCaption(e.target.value)}
+              className="border-pink-200 resize-none"
+              rows={3}
+            />
+          </div>
         </div>
       )}
 
-      <div className="space-y-2">
-        <Label htmlFor="caption">Legenda (opcional)</Label>
-        <Textarea
-          id="caption"
-          placeholder="Adicione uma legenda para sua foto..."
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
-          className="border-pink-200"
-        />
+      <div className="flex justify-end">
+        <Button
+          type="submit"
+          className="bg-pink-600 hover:bg-pink-700 text-white"
+          disabled={isUploading || !selectedFile}
+        >
+          {isUploading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enviando...
+            </>
+          ) : (
+            "Publicar"
+          )}
+        </Button>
       </div>
-
-      <Button type="submit" className="bg-pink-600 hover:bg-pink-700" disabled={isUploading || !selectedFile}>
-        {isUploading ? "Enviando..." : "Enviar Foto"}
-      </Button>
     </form>
   )
 }

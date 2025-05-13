@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,12 +11,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { formatDistanceToNow } from "date-fns"
-import { ptBR } from "date-fns/locale"
 import { Trash2 } from "lucide-react"
+import type React from "react"
 import { useState } from "react"
 import { toast } from "sonner"
 import { addComment, deleteComment } from "./actions"
@@ -44,6 +40,7 @@ export function CommentSection({ photo, currentUserId }: { photo: Photo; current
   const [comment, setComment] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [commentBeingDeleted, setCommentBeingDeleted] = useState<string | null>(null)
+  const [showAllComments, setShowAllComments] = useState(false)
 
   async function handleSubmitComment(e: React.FormEvent) {
     e.preventDefault()
@@ -75,90 +72,79 @@ export function CommentSection({ photo, currentUserId }: { photo: Photo; current
     }
   }
 
+  // Limitar comentários visíveis a 2, a menos que showAllComments seja true
+  const visibleComments = showAllComments ? photo.comments : photo.comments.slice(0, 2)
+
+  const hasMoreComments = photo.comments.length > 2 && !showAllComments
+
   return (
-    <div className="mt-2">
-      <h3 className="font-medium text-sm text-gray-700 mb-2">
-        {photo.comments.length > 0
-          ? `${photo.comments.length} comentário${photo.comments.length > 1 ? "s" : ""}`
-          : "Comentários"}
-      </h3>
-
+    <div>
+      {/* Lista de comentários */}
       {photo.comments.length > 0 && (
-        <div className="space-y-2 mb-3 max-h-40 overflow-y-auto">
-          {photo.comments.map((comment) => (
+        <div className="space-y-1.5 mb-3">
+          {visibleComments.map((comment) => (
             <div key={comment.id} className="flex items-start gap-2">
-              <Avatar className="w-6 h-6">
-                <AvatarImage src={comment.user.image || ""} alt={comment.user.name || "Convidado"} />
-                <AvatarFallback className="text-xs bg-pink-200 text-pink-700">
-                  {comment.user.name?.charAt(0) || "C"}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <div className="bg-gray-100 rounded-lg px-3 py-2 flex justify-between items-start">
-                  <div>
-                    <span className="font-medium text-sm">{comment.user.name || "Convidado"}</span>
-                    <p className="text-sm">{comment.content}</p>
-                  </div>
+              <p className="text-sm">
+                <span className="font-medium mr-1.5">{comment.user.name || "Convidado"}</span>
+                {comment.content}
 
-                  {/* Mostrar botão de exclusão apenas para o autor do comentário */}
-                  {currentUserId === comment.userId && (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-6 w-6 text-gray-400 hover:text-pink-700 hover:bg-transparent -mt-1 -mr-1"
+                {/* Botão de exclusão para o autor do comentário */}
+                {currentUserId === comment.userId && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <button className="ml-2 text-gray-400 hover:text-gray-600">
+                        <Trash2 className="h-3 w-3 inline" />
+                      </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="border-pink-100">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Excluir comentário</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Tem certeza que deseja excluir este comentário? Esta ação não pode ser desfeita.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="border-pink-200 text-pink-700">Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDeleteComment(comment.id)}
+                          disabled={commentBeingDeleted === comment.id}
+                          className="bg-pink-600 hover:bg-pink-700 text-white"
                         >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent className="border-pink-100">
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Excluir comentário</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Tem certeza que deseja excluir este comentário? Esta ação não pode ser desfeita.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel className="border-pink-200 text-pink-700">Cancelar</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => handleDeleteComment(comment.id)}
-                            disabled={commentBeingDeleted === comment.id}
-                            className="bg-pink-600 hover:bg-pink-700 text-white"
-                          >
-                            {commentBeingDeleted === comment.id ? "Excluindo..." : "Excluir"}
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  )}
-                </div>
-                <div className="text-xs text-gray-500 mt-1">
-                  {formatDistanceToNow(new Date(comment.createdAt), {
-                    addSuffix: true,
-                    locale: ptBR,
-                  })}
-                </div>
-              </div>
+                          {commentBeingDeleted === comment.id ? "Excluindo..." : "Excluir"}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
+              </p>
             </div>
           ))}
+
+          {/* Botão "Ver todos os comentários" */}
+          {hasMoreComments && (
+            <button onClick={() => setShowAllComments(true)} className="text-sm text-gray-500 hover:text-gray-700">
+              Ver todos os {photo.comments.length} comentários
+            </button>
+          )}
         </div>
       )}
 
-      <form onSubmit={handleSubmitComment} className="flex gap-2">
+      {/* Formulário de comentário */}
+      <form onSubmit={handleSubmitComment} className="flex items-center gap-2 pt-2 border-t border-gray-100">
         <Input
           placeholder="Adicione um comentário..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          className="border-pink-200"
+          className="border-none text-sm focus-visible:ring-0 px-0 py-1 h-auto"
         />
         <Button
           type="submit"
           size="sm"
-          className="bg-pink-600 hover:bg-pink-700"
+          variant="ghost"
+          className="text-pink-600 hover:text-pink-700 hover:bg-transparent px-2"
           disabled={isSubmitting || !comment.trim()}
         >
-          Enviar
+          {isSubmitting ? "Enviando..." : "Publicar"}
         </Button>
       </form>
     </div>
