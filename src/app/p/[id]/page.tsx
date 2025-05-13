@@ -81,7 +81,7 @@ async function getPhoto(photoId: string) {
 
 export default async function PhotoPage({ params }: Props) {
   const { id } = await params
-  console.log('???',id)
+  console.log('???', id)
   const photo = await getPhoto(id)
 
   if (!photo) {
@@ -141,7 +141,7 @@ export default async function PhotoPage({ params }: Props) {
         </div>
 
         {/* Botão de download */}
-        <div className="flex justify-center">''
+        <div className="flex justify-center">
           <a
             href={photo.url}
             download={`piettra15anos_${new Date().toISOString().split("T")[0]}.jpg`}

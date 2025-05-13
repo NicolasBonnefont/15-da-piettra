@@ -151,3 +151,48 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
+
+html {
+  overflow-y: scroll;
+}
+
+/* Estilo para a barra de rolagem completa */
+::-webkit-scrollbar {
+  width: 10px;  /* Largura da barra de rolagem vertical */
+  height: 10px; /* Altura da barra de rolagem horizontal */
+}
+
+/* Estilo para o "trilho" da barra de rolagem */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;  /* Cor bem clara para o trilho */
+  border-radius: 8px;   /* Bordas arredondadas */
+}
+
+/* Estilo para o "polegar" da barra de rolagem (a parte que se move) */
+::-webkit-scrollbar-thumb {
+  background: #e2e2e2;  /* Cor bem clara para o polegar */
+  border-radius: 8px;   /* Bordas arredondadas */
+  border: 2px solid #f1f1f1; /* Borda para dar um efeito de profundidade sutil */
+}
+
+/* Estilo para o polegar quando hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #d1d1d1;  /* Um pouco mais escuro no hover */
+}
+
+/* Estilo para a área dos botões de rolagem (opcional) */
+::-webkit-scrollbar-button {
+  display: none; /* Esconde os botões de rolagem */
+}
+
+/* Versão para Firefox */
+* {
+  scrollbar-width: thin;  /* "auto" ou "thin" */
+  scrollbar-color: #e2e2e2 #f1f1f1;  /* polegar e trilho */
+}
+
+/* Estilo para scroll no Dialog/Modal */
+.dialog-content {
+  max-height: 80vh;
+  overflow-y: auto;
+}

@@ -3,9 +3,9 @@ import getSession from "@/lib/get-session"
 import { cn } from "@/lib/utils"
 import { Calendar, Clock, MapPin, Shirt, Sparkles } from "lucide-react"
 import { Dancing_Script, Playfair_Display } from "next/font/google"
-import Image from "next/image"
 import Link from "next/link"
 
+import { ImageShake } from "@/components/image-shake"
 import { LoginButton } from "@/components/login-button"
 import { MultiImageCarousel } from "@/components/multi-image-carousel"
 import Countdown from "./count-down"
@@ -47,7 +47,7 @@ export default async function Home() {
 
             {/* Pré-título elegante */}
             <div className={cn(dancingScript.className, "text-2xl text-pink-600 mb-4")}>
-              Celebrando um momento especial
+              Um dia para celebrar um sonho
             </div>
 
             {/* Título principal refinado */}
@@ -57,12 +57,12 @@ export default async function Home() {
                 "text-5xl md:text-6xl lg:text-7xl font-bold text-pink-800 mb-6 leading-tight",
               )}
             >
-              Festa de 15 Anos da Piettra
+              A Festa de 15 Anos de Piettra
             </h1>
 
             {/* Subtítulo mais envolvente */}
             <p className="text-xl md:text-2xl text-pink-700 mb-12 italic">
-              Uma noite inesquecível para celebrar sonhos, memórias e novos começos
+              Uma noite mágica para celebrar a vida, as amizades e os sonhos que se tornam realidade.
             </p>
 
             {/* Contagem regressiva em destaque */}
@@ -76,7 +76,7 @@ export default async function Home() {
               </div>
 
               <p className="text-pink-600 italic mb-8 max-w-xl mx-auto">
-                Cada momento nos aproxima desta celebração única e especial
+                A cada instante, mais perto de celebrar este momento único e especial.
               </p>
 
               <Countdown />
@@ -91,7 +91,7 @@ export default async function Home() {
                     size="lg"
                     className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 rounded-full px-10 py-6 shadow-md hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px] border-none text-base"
                   >
-                    <Link href="/mural">Deixar uma Mensagem</Link>
+                    <Link href="/mural">Deixe sua Mensagem</Link>
                   </Button>
                   <Button
                     asChild
@@ -99,7 +99,7 @@ export default async function Home() {
                     variant="outline"
                     className="border-2 border-pink-500 text-pink-600 hover:bg-pink-50 rounded-full px-10 py-6 shadow-sm hover:shadow transition-all duration-300 hover:translate-y-[-2px] text-base"
                   >
-                    <Link href="/fotos">Ver Galeria de Fotos</Link>
+                    <Link href="/fotos">Ver a Galeria de Fotos</Link>
                   </Button>
                 </>
               ) : (
@@ -174,9 +174,15 @@ export default async function Home() {
             </div>
           </div>
           <div className="order-1 md:order-2">
-            <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
-              <div className="absolute inset-0 border-8 border-white z-10 rounded-2xl"></div>
-              <Image src="/pi/1.png" alt="Piettra" fill className="object-cover" />
+            <div className="h-[500px] rounded-2xl overflow-hidden">
+              <ImageShake
+                src="/pi/1.png"
+                alt="Piettra"
+                className="rounded-2xl"
+                interval={7} // A imagem vai chacoalhar a cada 7 segundos
+              >
+                <div className="absolute inset-0 border-8 border-white z-10 rounded-2xl"></div>
+              </ImageShake>
             </div>
           </div>
         </div>
