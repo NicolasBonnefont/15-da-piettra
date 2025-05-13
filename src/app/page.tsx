@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import getSession from "@/lib/get-session"
 import { cn } from "@/lib/utils"
-import { Calendar, Clock, MapPin, Shirt } from 'lucide-react'
-import { Playfair_Display } from 'next/font/google'
+import { Calendar, Clock, MapPin, Shirt, Sparkles } from "lucide-react"
+import { Dancing_Script, Playfair_Display } from "next/font/google"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -10,8 +10,9 @@ import { LoginButton } from "@/components/login-button"
 import { MultiImageCarousel } from "@/components/multi-image-carousel"
 import Countdown from "./count-down"
 
-// Importando fonte elegante para títulos
+// Importando fontes elegantes
 const playfair = Playfair_Display({ subsets: ["latin"] })
+const dancingScript = Dancing_Script({ subsets: ["latin"] })
 
 // Imagens para o carrossel
 const carouselImages = Array.from({ length: 14 }, (_, i) => `/pi/old-${i + 1}.jpg`)
@@ -21,23 +22,35 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center">
-      {/* Hero Section com background mais elegante e contagem regressiva integrada */}
-      <section className="w-full relative overflow-hidden">
-        {/* Background decorativo */}
-        <div className="absolute inset-0 bg-gradient-to-b from-pink-50 to-pink-200 opacity-90"></div>
-        <div className="absolute inset-0 bg-[url('/placeholder.svg?key=ql2aw')] bg-cover opacity-10"></div>
+      {/* Hero Section Refinada */}
+      <section className="w-full relative overflow-hidden min-h-screen flex items-center">
+        {/* Background com gradiente mais sofisticado */}
+        <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-pink-100 to-pink-200 opacity-90"></div>
 
-        {/* Elementos decorativos */}
-        <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-pink-200 blur-3xl opacity-40"></div>
-        <div className="absolute bottom-10 right-10 w-60 h-60 rounded-full bg-pink-300 blur-3xl opacity-30"></div>
+        {/* Padrão decorativo sutil */}
+        <div className="absolute inset-0 bg-[url('/placeholder.svg?key=pattern')] bg-repeat opacity-5"></div>
 
-        <div className="container relative mx-auto px-4 py-20 text-center z-10">
+        {/* Elementos decorativos refinados */}
+        <div className="absolute top-20 left-20 w-60 h-60 rounded-full bg-gradient-to-br from-pink-200 to-pink-300 blur-3xl opacity-30"></div>
+        <div className="absolute bottom-20 right-20 w-80 h-80 rounded-full bg-gradient-to-tl from-pink-200 to-pink-400 blur-3xl opacity-20"></div>
+        <div className="absolute top-1/3 right-1/4 w-20 h-20 rounded-full bg-pink-300 blur-2xl opacity-10"></div>
+        <div className="absolute bottom-1/3 left-1/4 w-24 h-24 rounded-full bg-pink-300 blur-2xl opacity-10"></div>
+
+        <div className="container relative mx-auto px-6 py-16 text-center z-10">
           <div className="max-w-3xl mx-auto">
-            {/* Elemento decorativo */}
-            <div className="mb-6 flex justify-center">
-              <div className="w-20 h-1 bg-gradient-to-r from-pink-300 to-pink-600"></div>
+            {/* Elemento decorativo superior */}
+            <div className="mb-8 flex justify-center items-center gap-3">
+              <div className="w-16 h-[1px] bg-gradient-to-r from-transparent to-pink-400"></div>
+              <Sparkles className="h-5 w-5 text-pink-500 animate-pulse" />
+              <div className="w-16 h-[1px] bg-gradient-to-l from-transparent to-pink-400"></div>
             </div>
 
+            {/* Pré-título elegante */}
+            <div className={cn(dancingScript.className, "text-2xl text-pink-600 mb-4")}>
+              Celebrando um momento especial
+            </div>
+
+            {/* Título principal refinado */}
             <h1
               className={cn(
                 playfair.className,
@@ -47,28 +60,36 @@ export default async function Home() {
               Festa de 15 Anos da Piettra
             </h1>
 
-            <p className="text-xl md:text-2xl text-pink-700 mb-10 italic">
-              Venha celebrar este momento especial conosco!
+            {/* Subtítulo mais envolvente */}
+            <p className="text-xl md:text-2xl text-pink-700 mb-12 italic">
+              Uma noite inesquecível para celebrar sonhos, memórias e novos começos
             </p>
 
-            {/* Contagem Regressiva movida para cima */}
-            <div className="mb-10">
-              <h2 className={cn(playfair.className, "text-2xl md:text-3xl font-bold text-pink-800 mb-4")}>
-                Contagem Regressiva
-              </h2>
-              <p className="text-pink-600 italic mb-6 max-w-xl mx-auto">
-                Cada segundo nos aproxima deste momento especial
+            {/* Contagem regressiva em destaque */}
+            <div className="mb-12 bg-white/50 backdrop-blur-sm py-10 px-6 rounded-2xl shadow-lg border border-pink-100">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <div className="w-10 h-[1px] bg-gradient-to-r from-transparent to-pink-400"></div>
+                <h2 className={cn(playfair.className, "text-2xl md:text-3xl font-bold text-pink-800")}>
+                  Contagem Regressiva
+                </h2>
+                <div className="w-10 h-[1px] bg-gradient-to-l from-transparent to-pink-400"></div>
+              </div>
+
+              <p className="text-pink-600 italic mb-8 max-w-xl mx-auto">
+                Cada momento nos aproxima desta celebração única e especial
               </p>
+
               <Countdown />
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-center gap-4 mt-12">
+            {/* Botões de ação refinados */}
+            <div className="flex flex-col sm:flex-row justify-center gap-5 mt-12">
               {session ? (
                 <>
                   <Button
                     asChild
                     size="lg"
-                    className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 rounded-full px-8 shadow-md hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px] border-none"
+                    className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 rounded-full px-10 py-6 shadow-md hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px] border-none text-base"
                   >
                     <Link href="/mural">Deixar uma Mensagem</Link>
                   </Button>
@@ -76,9 +97,9 @@ export default async function Home() {
                     asChild
                     size="lg"
                     variant="outline"
-                    className="border-2 border-pink-500 text-pink-600 hover:bg-pink-50 rounded-full px-8 shadow-sm hover:shadow transition-all duration-300 hover:translate-y-[-2px]"
+                    className="border-2 border-pink-500 text-pink-600 hover:bg-pink-50 rounded-full px-10 py-6 shadow-sm hover:shadow transition-all duration-300 hover:translate-y-[-2px] text-base"
                   >
-                    <Link href="/fotos">Ver Fotos</Link>
+                    <Link href="/fotos">Ver Galeria de Fotos</Link>
                   </Button>
                 </>
               ) : (
@@ -86,6 +107,11 @@ export default async function Home() {
                   <LoginButton />
                 </div>
               )}
+            </div>
+
+            {/* Elemento decorativo inferior */}
+            <div className="mt-16 flex justify-center">
+              <div className="w-24 h-1 bg-gradient-to-r from-pink-300 to-pink-500 rounded-full"></div>
             </div>
           </div>
         </div>
@@ -160,7 +186,7 @@ export default async function Home() {
       <section className="w-full bg-gradient-to-b from-pink-50 to-white py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/placeholder.svg?key=4ne3x')] bg-cover opacity-5"></div>
 
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-2 relative z-10">
           <div className="flex flex-col items-center mb-12">
             <div className="w-16 h-1 bg-gradient-to-r from-pink-300 to-pink-600 mb-4"></div>
             <h2 className={cn(playfair.className, "text-3xl md:text-4xl font-bold text-pink-800 mb-4 text-center")}>
@@ -173,16 +199,6 @@ export default async function Home() {
 
           {/* Carrossel de imagens */}
           <MultiImageCarousel images={carouselImages} />
-
-          <div className="text-center mt-12">
-            <Button
-              asChild
-              size="lg"
-              className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 rounded-full px-8 shadow-md hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px] border-none"
-            >
-              <Link href="/fotos">Ver Galeria Completa</Link>
-            </Button>
-          </div>
         </div>
       </section>
 
