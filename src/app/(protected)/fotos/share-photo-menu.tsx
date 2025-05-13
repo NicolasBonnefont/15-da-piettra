@@ -35,7 +35,7 @@ export function SharePhotoMenu({ photo }: { photo: Photo }) {
         title: "Festa de 15 Anos da Piettra",
         text: `Confira esta foto ${photo.caption ? `"${photo.caption}"` : ""} compartilhada por ${photo.user.name || "um convidado"
           }!`,
-        url: window.location.href,
+        url: photo.url, // Link direto da foto
       })
       return true
     } catch (error) {
@@ -49,7 +49,7 @@ export function SharePhotoMenu({ photo }: { photo: Photo }) {
 
   // Função para gerar URLs de compartilhamento para diferentes plataformas
   const generateShareUrl = (platform: string) => {
-    const url = encodeURIComponent(window.location.href)
+    const url = encodeURIComponent(photo.url) // Link direto da foto
     const text = encodeURIComponent(
       `Confira esta foto ${photo.caption ? `"${photo.caption}"` : ""} da Festa de 15 Anos da Piettra!`,
     )
@@ -71,8 +71,8 @@ export function SharePhotoMenu({ photo }: { photo: Photo }) {
   // Função para copiar o link para a área de transferência
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href)
-      toast.success("Link copiado para a área de transferência")
+      await navigator.clipboard.writeText(photo.url) // Link direto da foto
+      toast.success("Link da foto copiado para a área de transferência")
       return true
     } catch (error) {
       console.error("Erro ao copiar link:", error)
@@ -166,7 +166,7 @@ export function SharePhotoMenu({ photo }: { photo: Photo }) {
 
         <DropdownMenuItem onClick={copyLink} className="cursor-pointer">
           <Link className="mr-2 h-4 w-4" />
-          <span>Copiar link</span>
+          <span>Copiar link da foto</span>
         </DropdownMenuItem>
 
         <DropdownMenuItem onClick={downloadImage} className="cursor-pointer" disabled={isLoading}>
