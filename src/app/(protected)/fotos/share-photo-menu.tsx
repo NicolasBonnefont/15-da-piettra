@@ -23,6 +23,12 @@ type Photo = {
 export function SharePhotoMenu({ photo }: { photo: Photo }) {
   const [isLoading, setIsLoading] = useState(false)
 
+  // Gerar URL pública para a foto
+  const getPublicPhotoUrl = () => {
+    // Usar a URL pública da página de visualização de foto
+    return `${window.location.origin}/p/${photo.id}`
+  }
+
   // Função para compartilhar usando a Web Share API (quando disponível)
   const shareWithWebShare = async () => {
     if (!navigator.share) {
@@ -33,9 +39,10 @@ export function SharePhotoMenu({ photo }: { photo: Photo }) {
     try {
       await navigator.share({
         title: "Festa de 15 Anos da Piettra",
-        text: `Confira esta foto ${photo.caption ? `"${photo.caption}"` : ""} compartilhada por ${photo.user.name || "um convidado"
-          }!`,
-        url: photo.url, // Link direto da foto
+        text: `Confira esta foto ${photo.caption ? `"${photo.caption}"` : ""} compartilhada por ${
+          photo.user.name || "um convidado"
+        }!`,
+        url: getPublicPhotoUrl(), // Link para a página pública da foto
       })
       return true
     } catch (error) {
@@ -49,7 +56,7 @@ export function SharePhotoMenu({ photo }: { photo: Photo }) {
 
   // Função para gerar URLs de compartilhamento para diferentes plataformas
   const generateShareUrl = (platform: string) => {
-    const url = encodeURIComponent(photo.url) // Link direto da foto
+    const url = encodeURIComponent(getPublicPhotoUrl()) // Link para a página pública da foto
     const text = encodeURIComponent(
       `Confira esta foto ${photo.caption ? `"${photo.caption}"` : ""} da Festa de 15 Anos da Piettra!`,
     )
@@ -71,7 +78,7 @@ export function SharePhotoMenu({ photo }: { photo: Photo }) {
   // Função para copiar o link para a área de transferência
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(photo.url) // Link direto da foto
+      await navigator.clipboard.writeText(getPublicPhotoUrl())
       toast.success("Link da foto copiado para a área de transferência")
       return true
     } catch (error) {

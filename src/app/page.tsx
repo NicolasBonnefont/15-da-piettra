@@ -1,22 +1,27 @@
 import { Button } from "@/components/ui/button"
 import getSession from "@/lib/get-session"
 import { cn } from "@/lib/utils"
-import { Calendar, Clock, MapPin, Shirt } from "lucide-react"
-import { Playfair_Display } from "next/font/google"
+import { Calendar, Clock, MapPin, Shirt } from 'lucide-react'
+import { Playfair_Display } from 'next/font/google'
 import Image from "next/image"
 import Link from "next/link"
-import Countdown from "./count-down"
+
 import { LoginButton } from "@/components/login-button"
+import { MultiImageCarousel } from "@/components/multi-image-carousel"
+import Countdown from "./count-down"
 
 // Importando fonte elegante para títulos
 const playfair = Playfair_Display({ subsets: ["latin"] })
+
+// Imagens para o carrossel
+const carouselImages = Array.from({ length: 14 }, (_, i) => `/pi/old-${i + 1}.jpg`)
 
 export default async function Home() {
   const session = await getSession()
 
   return (
     <main className="flex min-h-screen flex-col items-center">
-      {/* Hero Section com background mais elegante */}
+      {/* Hero Section com background mais elegante e contagem regressiva integrada */}
       <section className="w-full relative overflow-hidden">
         {/* Background decorativo */}
         <div className="absolute inset-0 bg-gradient-to-b from-pink-50 to-pink-200 opacity-90"></div>
@@ -26,7 +31,7 @@ export default async function Home() {
         <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-pink-200 blur-3xl opacity-40"></div>
         <div className="absolute bottom-10 right-10 w-60 h-60 rounded-full bg-pink-300 blur-3xl opacity-30"></div>
 
-        <div className="container relative mx-auto px-4 py-28 text-center z-10">
+        <div className="container relative mx-auto px-4 py-20 text-center z-10">
           <div className="max-w-3xl mx-auto">
             {/* Elemento decorativo */}
             <div className="mb-6 flex justify-center">
@@ -46,7 +51,18 @@ export default async function Home() {
               Venha celebrar este momento especial conosco!
             </p>
 
-            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-10">
+            {/* Contagem Regressiva movida para cima */}
+            <div className="mb-10">
+              <h2 className={cn(playfair.className, "text-2xl md:text-3xl font-bold text-pink-800 mb-4")}>
+                Contagem Regressiva
+              </h2>
+              <p className="text-pink-600 italic mb-6 max-w-xl mx-auto">
+                Cada segundo nos aproxima deste momento especial
+              </p>
+              <Countdown />
+            </div>
+
+            <div className="flex flex-col sm:flex-row justify-center gap-4 mt-12">
               {session ? (
                 <>
                   <Button
@@ -72,20 +88,6 @@ export default async function Home() {
               )}
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Contagem Regressiva com design melhorado */}
-      <section className="container mx-auto py-20 px-4 text-center relative">
-        <div className="absolute inset-0 bg-[url('/placeholder.svg?key=s71lj')] bg-cover opacity-5"></div>
-        <div className="relative z-10">
-          <h2 className={cn(playfair.className, "text-3xl md:text-4xl font-bold text-pink-800 mb-4")}>
-            Contagem Regressiva
-          </h2>
-          <p className="text-pink-600 italic mb-10 max-w-xl mx-auto">
-            Cada segundo nos aproxima deste momento especial que ficará para sempre em nossas memórias
-          </p>
-          <Countdown />
         </div>
       </section>
 
@@ -148,13 +150,13 @@ export default async function Home() {
           <div className="order-1 md:order-2">
             <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
               <div className="absolute inset-0 border-8 border-white z-10 rounded-2xl"></div>
-              <Image src="/placeholder.svg?key=geus4" alt="Piettra" fill className="object-cover" />
+              <Image src="/pi/1.png" alt="Piettra" fill className="object-cover" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Galeria de Fotos com design elegante */}
+      {/* Galeria de Fotos com carrossel infinito */}
       <section className="w-full bg-gradient-to-b from-pink-50 to-white py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/placeholder.svg?key=4ne3x')] bg-cover opacity-5"></div>
 
@@ -164,31 +166,13 @@ export default async function Home() {
             <h2 className={cn(playfair.className, "text-3xl md:text-4xl font-bold text-pink-800 mb-4 text-center")}>
               Momentos Especiais
             </h2>
-            <p className="text-pink-600 italic text-center max-w-xl">
+            <p className="text-pink-600 italic text-center max-w-xl mb-10">
               Memórias que contam a história de uma jornada incrível até os 15 anos
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className="group relative h-80 rounded-xl overflow-hidden shadow-xl transform transition-all duration-500 hover:scale-105 hover:shadow-2xl"
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-pink-900/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                <Image
-                  src={`/placeholder.svg?key=5qqhq&key=3uk46&height=400&width=300&query=elegant teenage girl celebration moment ${i}`}
-                  alt={`Momento ${i}`}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 z-20">
-                  <p className="font-medium">Momento Especial</p>
-                  <p className="text-sm text-white/80">Memórias inesquecíveis</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* Carrossel de imagens */}
+          <MultiImageCarousel images={carouselImages} />
 
           <div className="text-center mt-12">
             <Button

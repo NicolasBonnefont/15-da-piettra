@@ -5,6 +5,37 @@ import { deleteFromMinio, extractKeyFromUrl, uploadToMinio } from "@/lib/minio"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 
+// Função auxiliar para garantir que o nome do arquivo tenha uma extensão
+function ensureFileExtension(file: File): string {
+  // Extrair o nome original e a extensão
+  const originalName = file.name || ""
+  const fileExtension = originalName.split(".").pop()?.toLowerCase()
+
+  // Se não tiver extensão no nome, tentar extrair do tipo MIME
+  if (!fileExtension || fileExtension === originalName) {
+    const mimeType = file.type
+    // Mapeamento de tipos MIME comuns para extensões
+    const mimeToExt: Record<string, string> = {
+      "image/jpeg": "jpg",
+      "image/jpg": "jpg",
+      "image/png": "png",
+      "image/gif": "gif",
+      "image/webp": "webp",
+      "image/bmp": "bmp",
+      "image/heic": "heic",
+      "image/heif": "heif",
+    }
+
+    const extFromMime = mimeToExt[mimeType] || "jpg" // Padrão para jpg se não reconhecer
+    return `${Date.now()}-${originalName.replace(/[^a-zA-Z0-9_-]/g, "_")}.${extFromMime}`
+  }
+
+  // Se já tiver extensão, apenas sanitizar o nome
+  const baseName = originalName.substring(0, originalName.lastIndexOf("."))
+  const sanitizedName = baseName.replace(/[^a-zA-Z0-9_-]/g, "_")
+  return `${Date.now()}-${sanitizedName}.${fileExtension}`
+}
+
 export async function uploadPhoto(file: File, caption?: string) {
   const session = await getSession()
 
@@ -12,8 +43,8 @@ export async function uploadPhoto(file: File, caption?: string) {
     throw new Error("Você precisa estar logado para enviar uma foto")
   }
 
-  // Gerar um nome de arquivo único
-  const key = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`
+  // Gerar um nome de arquivo único com extensão garantida
+  const key = ensureFileExtension(file)
 
   try {
     // Fazer upload do arquivo para o MinIO e obter a URL

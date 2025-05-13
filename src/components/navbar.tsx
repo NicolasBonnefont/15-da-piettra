@@ -22,8 +22,8 @@ export async function Navbar() {
   const session = await getSession()
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/80 border-b border-pink-100">
-      <div className="container flex h-16 items-center justify-between">
+    <header className=" flex items-center  sticky top-0 z-50 w-full backdrop-blur-md bg-white/80 border-b border-pink-100 my-auto">
+      <div className="container flex h-16 items-center justify-between ">
         <Link href="/" className="flex items-center gap-2 transition-transform hover:scale-105">
           <div className="bg-gradient-to-r from-pink-500 to-pink-600 text-white p-1.5 rounded-lg">
             <Heart className="h-5 w-5" />
