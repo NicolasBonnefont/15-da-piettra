@@ -57,9 +57,10 @@ export function PhotoUploadForm({ onSuccess }: PhotoUploadFormProps) {
 
         // Opções de compressão
         const options = {
-          maxSizeMB: 5,
-          maxWidthOrHeight: 1200,
+          maxSizeMB: 10,
+          maxWidthOrHeight: 2400,
           useWebWorker: true,
+          quality: 0.9,
         }
 
         const compressedFile = await imageCompression(file, options)
