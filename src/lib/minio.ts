@@ -3,18 +3,18 @@
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 
 // Configuração do cliente MinIO/S3 com valores padrão que funcionam com MinIO local
- const s3Client = new S3Client({
-  region: process.env.MINIO_REGION || "us-east-1",
-  endpoint: process.env.MINIO_ENDPOINT || "http://localhost:9000",
+const s3Client = new S3Client({
+  region: process.env.MINIO_REGION!,
+  endpoint: process.env.MINIO_ENDPOINT!,
   credentials: {
-    accessKeyId: process.env.MINIO_ACCESS_KEY || "minio",
-    secretAccessKey: process.env.MINIO_SECRET_KEY || "minio123",
+    accessKeyId: process.env.MINIO_ACCESS_KEY!,
+    secretAccessKey: process.env.MINIO_SECRET_KEY!,
   },
   forcePathStyle: true, // Necessário para MinIO
 })
 
 // Bucket padrão
-const bucketName = process.env.MINIO_BUCKET_NAME || "fotos"
+const bucketName = process.env.MINIO_BUCKET_NAME!
 
 /**
  * Faz upload de um arquivo para o MinIO e retorna a URL pública
