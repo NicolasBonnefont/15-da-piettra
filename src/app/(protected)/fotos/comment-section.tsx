@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,10 +13,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Trash2 } from "lucide-react"
-import type React from "react"
+import { Textarea } from "@/components/ui/textarea"
+import { formatDistanceToNow } from "date-fns"
+import { ptBR } from "date-fns/locale"
+import { Loader2, Send, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 import { addComment, deleteComment } from "./actions"
@@ -25,6 +29,7 @@ type Comment = {
   createdAt: Date
   userId: string
   user: {
+    id: string
     name: string | null
     image: string | null
   }
@@ -32,71 +37,143 @@ type Comment = {
 
 type Photo = {
   id: string
-  userId: string
   comments: Comment[]
+  // outros campos da foto...
 }
 
-export function CommentSection({ photo, currentUserId }: { photo: Photo; currentUserId?: string }) {
+interface CommentSectionProps {
+  photo: Photo
+  currentUserId?: string
+  onCommentAdded?: (newComment: Comment) => void
+  onCommentDeleted?: (commentId: string) => void
+}
+
+export function CommentSection({ photo, currentUserId, onCommentAdded, onCommentDeleted }: CommentSectionProps) {
   const [comment, setComment] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [commentBeingDeleted, setCommentBeingDeleted] = useState<string | null>(null)
-  const [showAllComments, setShowAllComments] = useState(false)
+  const [localComments, setLocalComments] = useState<Comment[]>(photo.comments)
+  const [deletingCommentId, setDeletingCommentId] = useState<string | null>(null)
 
-  async function handleSubmitComment(e: React.FormEvent) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!comment.trim()) return
+    if (!comment.trim()) {
+      toast.error("O comentário não pode estar vazio")
+      return
+    }
+
+    if (!currentUserId) {
+      toast.error("Você precisa estar logado para comentar")
+      return
+    }
 
     setIsSubmitting(true)
 
     try {
-      await addComment(photo.id, comment)
+      const newComment = await addComment(photo.id, comment)
+
+      // Criar um objeto de comentário completo para atualização local
+      const completeComment: Comment = {
+        ...newComment,
+        user: {
+          id: currentUserId,
+          name: "Você", // Placeholder temporário
+          image: null, // Placeholder temporário
+        },
+      }
+
+      // Atualizar o estado local com o novo comentário
+      setLocalComments((prev) => [...prev, completeComment])
+
+      // Notificar o componente pai sobre o novo comentário
+      if (onCommentAdded) {
+        onCommentAdded(completeComment)
+      }
+
+      // Limpar o campo de comentário
       setComment("")
-    } catch {
-      toast.error("Não foi possível adicionar seu comentário. Tente novamente.")
+
+      toast.success("Comentário adicionado com sucesso")
+    } catch (error) {
+      console.error("Erro ao adicionar comentário:", error)
+      toast.error("Não foi possível adicionar o comentário. Tente novamente.")
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  async function handleDeleteComment(commentId: string) {
-    setCommentBeingDeleted(commentId)
+  const handleDeleteComment = async (commentId: string) => {
+    if (!currentUserId) {
+      toast.error("Você precisa estar logado para excluir um comentário")
+      return
+    }
+
+    setDeletingCommentId(commentId)
+
     try {
-      await deleteComment(commentId)
-      toast.success("Comentário excluído com sucesso")
+      const result = await deleteComment(commentId)
+
+      if (result.success) {
+        // Atualizar o estado local removendo o comentário
+        setLocalComments((prev) => prev.filter((c) => c.id !== commentId))
+
+        // Notificar o componente pai sobre a exclusão
+        if (onCommentDeleted) {
+          onCommentDeleted(commentId)
+        }
+
+        toast.success("Comentário excluído com sucesso")
+      } else {
+        throw new Error("Falha ao excluir o comentário")
+      }
     } catch (error) {
-      toast.error("Erro ao excluir o comentário. Tente novamente.")
-      console.error(error)
+      console.error("Erro ao excluir comentário:", error)
+      toast.error("Não foi possível excluir o comentário. Tente novamente.")
     } finally {
-      setCommentBeingDeleted(null)
+      setDeletingCommentId(null)
     }
   }
 
-  // Limitar comentários visíveis a 2, a menos que showAllComments seja true
-  const visibleComments = showAllComments ? photo.comments : photo.comments.slice(0, 2)
-
-  const hasMoreComments = photo.comments.length > 2 && !showAllComments
-
   return (
-    <div>
+    <div className="space-y-3">
       {/* Lista de comentários */}
-      {photo.comments.length > 0 && (
-        <div className="space-y-1.5 mb-3">
-          {visibleComments.map((comment) => (
-            <div key={comment.id} className="flex items-start gap-2">
-              <p className="text-sm">
-                <span className="font-medium mr-1.5">{comment.user.name || "Convidado"}</span>
-                {comment.content}
+      {localComments.length > 0 ? (
+        <div className="space-y-2 max-h-40 overflow-y-auto">
+          {localComments.map((comment) => (
+            <div key={comment.id} className="flex gap-2 group">
+              <Avatar className="h-6 w-6 flex-shrink-0">
+                <AvatarImage src={comment.user.image || ""} alt={comment.user.name || "Usuário"} />
+                <AvatarFallback className="bg-gradient-to-br from-pink-400 to-pink-600 text-white text-xs">
+                  {comment.user.name?.charAt(0) || "U"}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap items-baseline gap-1">
+                  <span className="font-medium text-xs">{comment.user.name || "Usuário"}</span>
+                  <p className="text-xs break-words">{comment.content}</p>
+                </div>
+                <p className="text-[10px] text-gray-500">
+                  {formatDistanceToNow(new Date(comment.createdAt), {
+                    addSuffix: true,
+                    locale: ptBR,
+                  })}
+                </p>
+              </div>
 
-                {/* Botão de exclusão para o autor do comentário */}
-                {currentUserId === comment.userId && (
+              {/* Opções do comentário (excluir) - apenas para o autor - SEMPRE VISÍVEL */}
+              {currentUserId === comment.userId && (
+                <div>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <button className="ml-2 text-gray-400 hover:text-gray-600">
-                        <Trash2 className="h-3 w-3 inline" />
-                      </button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 rounded-full text-pink-500 hover:bg-pink-50 hover:text-pink-600"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent className="border-pink-100">
+                    <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>Excluir comentário</AlertDialogTitle>
                         <AlertDialogDescription>
@@ -104,49 +181,50 @@ export function CommentSection({ photo, currentUserId }: { photo: Photo; current
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel className="border-pink-200 text-pink-700">Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => handleDeleteComment(comment.id)}
-                          disabled={commentBeingDeleted === comment.id}
-                          className="bg-pink-600 hover:bg-pink-700 text-white"
+                          className="bg-red-500 hover:bg-red-600"
                         >
-                          {commentBeingDeleted === comment.id ? "Excluindo..." : "Excluir"}
+                          {deletingCommentId === comment.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                          ) : (
+                            <Trash2 className="h-4 w-4 mr-2" />
+                          )}
+                          Excluir
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
-                )}
-              </p>
+                </div>
+              )}
             </div>
           ))}
-
-          {/* Botão "Ver todos os comentários" */}
-          {hasMoreComments && (
-            <button onClick={() => setShowAllComments(true)} className="text-sm text-gray-500 hover:text-gray-700">
-              Ver todos os {photo.comments.length} comentários
-            </button>
-          )}
         </div>
+      ) : (
+        <p className="text-xs text-gray-500 italic">Seja o primeiro a comentar</p>
       )}
 
       {/* Formulário de comentário */}
-      <form onSubmit={handleSubmitComment} className="flex items-center gap-2 pt-2 border-t border-gray-100">
-        <Input
-          placeholder="Adicione um comentário..."
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          className="border-none text-sm focus-visible:ring-0 px-0 py-1 h-auto"
-        />
-        <Button
-          type="submit"
-          size="sm"
-          variant="ghost"
-          className="text-pink-600 hover:text-pink-700 hover:bg-transparent px-2"
-          disabled={isSubmitting || !comment.trim()}
-        >
-          {isSubmitting ? "Enviando..." : "Publicar"}
-        </Button>
-      </form>
+      {currentUserId && (
+        <form onSubmit={handleSubmit} className="flex gap-2 items-end">
+          <Textarea
+            placeholder="Adicione um comentário..."
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            className="min-h-[60px] text-sm resize-none border-pink-200 focus-visible:ring-pink-400"
+            disabled={isSubmitting}
+          />
+          <Button
+            type="submit"
+            size="sm"
+            className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 rounded-full p-2 h-auto"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+          </Button>
+        </form>
+      )}
     </div>
   )
 }

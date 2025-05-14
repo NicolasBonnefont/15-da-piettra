@@ -29,6 +29,7 @@ export function DeletePhotoButton({ photoId }: { photoId: string }) {
     setIsDeleting(true)
     try {
       await deletePhoto(photoId)
+      location.reload()
       toast.success("Foto excluída com sucesso")
     } catch (error) {
       toast.error("Erro ao excluir a foto. Tente novamente.")

@@ -67,14 +67,19 @@ export async function uploadPhoto(file: File, caption?: string) {
   }
 }
 
-export async function getPhotos() {
+export async function getPhotos(page = 1, limit = 10) {
   const session = await getSession()
   const userId = session?.user?.id
+
+  // Calcular o offset para paginação
+  const skip = (page - 1) * limit
 
   const photos = await prisma.photo.findMany({
     orderBy: {
       createdAt: "desc",
     },
+    skip,
+    take: limit,
     include: {
       user: {
         select: {
@@ -84,7 +89,11 @@ export async function getPhotos() {
         },
       },
       comments: {
-        include: {
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          userId: true,
           user: {
             select: {
               id: true,

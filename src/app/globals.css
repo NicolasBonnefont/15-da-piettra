@@ -191,8 +191,3 @@ html {
   scrollbar-color: #e2e2e2 #f1f1f1;  /* polegar e trilho */
 }
 
-/* Estilo para scroll no Dialog/Modal */
-.dialog-content {
-  max-height: 80vh;
-  overflow-y: auto;
-}

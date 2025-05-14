@@ -141,7 +141,7 @@ export default async function Home() {
                     </div>
                     <h3 className="font-semibold text-pink-700">Data</h3>
                   </div>
-                  <p className="text-gray-700 pl-11">15 de Junho de 2025</p>
+                  <p className="text-gray-700 pl-11">23 de Maio de 2025</p>
                 </div>
                 <div className="bg-white bg-opacity-70 backdrop-blur-sm p-6 rounded-xl shadow-md border border-pink-100 transform transition-transform duration-300 hover:translate-y-[-5px]">
                   <div className="flex items-center mb-2">
@@ -159,7 +159,7 @@ export default async function Home() {
                     </div>
                     <h3 className="font-semibold text-pink-700">Local</h3>
                   </div>
-                  <p className="text-gray-700 pl-11">Salão de Festas Elegance</p>
+                  <p className="text-gray-700 pl-11">Salão de Festas Ilha de Capri</p>
                 </div>
                 <div className="bg-white bg-opacity-70 backdrop-blur-sm p-6 rounded-xl shadow-md border border-pink-100 transform transition-transform duration-300 hover:translate-y-[-5px]">
                   <div className="flex items-center mb-2">
@@ -225,7 +225,7 @@ export default async function Home() {
       <footer className="w-full bg-gradient-to-b from-white to-pink-50 py-10 px-4 text-center">
         <div className="container mx-auto">
           <p className="text-pink-700 mb-2">Festa de 15 Anos da Piettra</p>
-          <p className="text-pink-500 text-sm">15 de Junho de 2025</p>
+          <p className="text-pink-500 text-sm">23 de Maio de 2025</p>
         </div>
       </footer>
     </main>

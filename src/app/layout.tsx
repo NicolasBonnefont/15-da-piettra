@@ -1,3 +1,4 @@
+import { BackToTop } from "@/components/back-to-top"
 import { Navbar } from "@/components/navbar"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Navbar />
         {children}
+        <BackToTop />
         <Toaster position="top-center" />
       </body>
     </html>

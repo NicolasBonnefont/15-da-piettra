@@ -1,28 +1,29 @@
-import { cn } from "@/lib/utils"
-import { Playfair_Display } from "next/font/google"
-import { PhotoGallery } from "./photo-gallery"
+import getSession from "@/lib/get-session"
+import { Suspense } from "react"
+import { getPhotos } from "./actions"
+import { PhotoGalleryInfinite, PhotoGallerySkeleton } from "./photo-gallery-infinite"
 import { UploadPhotoButton } from "./upload-photo-button"
 
-const playfair = Playfair_Display({ subsets: ["latin"] })
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 export default async function FotosPage() {
+  const session = await getSession()
+  const photos = await getPhotos()
+
   return (
-    <main className="container mx-auto py-10 px-4">
-      <h1 className={cn(playfair.className, "text-4xl font-bold text-pink-800 text-center mb-6")}>Galeria de Fotos</h1>
-
-      {/* Botão de upload centralizado */}
-      <div className="flex justify-center mb-10">
-        <UploadPhotoButton />
+    <main className="container mx-auto py-8 px-4">
+      <div className="flex flex-col items-center mb-8">
+        <h1 className="text-3xl font-bold text-pink-800 mb-4 text-center">Galeria de Fotos</h1>
+        <p className="text-gray-600 mb-6 text-center max-w-2xl">
+          Compartilhe e veja os momentos especiais da festa. Todas as fotos enviadas serão exibidas aqui.
+        </p>
+        {session && <UploadPhotoButton />}
       </div>
 
-      <div className="max-w-xl mx-auto">
-        <div className="mt-6">
-          <h2 className={cn(playfair.className, "text-2xl font-semibold text-pink-700 mb-6 text-center")}>
-            Fotos dos Convidados
-          </h2>
-          <PhotoGallery />
-        </div>
-      </div>
+      <Suspense fallback={<PhotoGallerySkeleton />}>
+        <PhotoGalleryInfinite initialPhotos={photos} currentUserId={session?.user?.id} />
+      </Suspense>
     </main>
   )
 }

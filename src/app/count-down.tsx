@@ -4,7 +4,8 @@ import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 
 export default function Countdown() {
-  const partyDate = new Date("2025-06-15T19:00:00")
+  // Data atualizada para 23 de Maio de 2025 às 19:00
+  const partyDate = new Date("2025-05-23T19:00:00")
   const [timeLeft, setTimeLeft] = useState(getTimeLeft())
 
   function getTimeLeft() {

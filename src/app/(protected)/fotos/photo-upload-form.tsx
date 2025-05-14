@@ -57,8 +57,8 @@ export function PhotoUploadForm({ onSuccess }: PhotoUploadFormProps) {
 
         // Opções de compressão
         const options = {
-          maxSizeMB: 10,
-          maxWidthOrHeight: 2400,
+          maxSizeMB: 5,
+          maxWidthOrHeight: 1080,
           useWebWorker: true,
           quality: 0.9,
         }
