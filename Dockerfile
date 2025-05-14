@@ -59,6 +59,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Copy Prisma migrations and schema for deployment
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
+# Create startup script that runs migrations before starting the app
+RUN echo '#!/bin/sh\nnpx prisma migrate deploy\nnode server.js' > ./start.sh && chmod +x ./start.sh
+
+# Switch to non-root user
 USER nextjs
 
 EXPOSE 3000
@@ -68,8 +72,5 @@ ENV PORT=3000
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
-
-# Create startup script that runs migrations before starting the app
-RUN echo '#!/bin/sh\nnpx prisma migrate deploy\nnode server.js' > ./start.sh && chmod +x ./start.sh
 
 CMD ["./start.sh"]
