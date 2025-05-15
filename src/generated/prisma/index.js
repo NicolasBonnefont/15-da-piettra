@@ -324,7 +324,7 @@ const config = {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "mysql://root:@numsey1008@pi-db-db.srv.bonnefont.com.br:3306/piettra_db"
+        "value": "mysql://root:@Numsey1008@31.97.18.31:3308/piettra"
       }
     }
   },
