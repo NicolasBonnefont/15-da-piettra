@@ -103,7 +103,7 @@ export default async function Home() {
                   </Button>
                 </>
               ) : (
-                <div className="transform hover:scale-105 transition-transform duration-300">
+                <div className="transform hover:scale-105 transition-transform duration-300 mx-auto">
                   <LoginButton />
                 </div>
               )}
