@@ -19,7 +19,6 @@ type Props = {
 export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
   const { id } = await params;
   const photo = await getPhoto(id)
-
   if (!photo) {
     return {
       title: "Foto não encontrada - Festa de 15 Anos da Piettra",
@@ -28,8 +27,13 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
   }
 
   const title = photo.caption ? `${photo.caption} - Festa de 15 Anos da Piettra` : "Foto da Festa de 15 Anos da Piettra"
-
   const description = `Foto compartilhada por ${photo.user.name || "um convidado"} na Festa de 15 Anos da Piettra`
+  const image = {
+    url: photo.url,
+    width: 1200,
+    height: 630,
+    alt: photo.caption || "Foto da festa de 15 anos",
+  }
 
   return {
     title,
@@ -40,27 +44,30 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
       type: "article",
       publishedTime: photo.createdAt.toISOString(),
       authors: photo.user.name ? [photo.user.name] : undefined,
-      images: [
-        {
-          url: photo.url, // URL absoluta da imagem
-          width: 1200,    // ajuste conforme sua imagem
-          height: 630,    // ajuste conforme sua imagem
-          alt: photo.caption || "Foto da festa de 15 anos",
-        },
-      ],
+      images: [image],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [photo.url], // URL absoluta da imagem
+      images: [photo.url],
+    },
+    // Facebook usa as mesmas tags do Open Graph
+    other: {
+      "fb:app_id": process.env.FACEBOOK_APP_ID || "", // Defina sua App ID do Facebook no .env
+      "og:title": title,
+      "og:description": description,
+      "og:image": photo.url,
+      "og:image:width": "1200",
+      "og:image:height": "630",
+      "og:type": "article",
+      "og:url": `${process.env.NEXT_PUBLIC_SITE_URL || ""}/p/${photo.id}`,
     },
   }
 }
 
 // Função para obter a foto do banco de dados
 async function getPhoto(photoId: string) {
-  console.log(photoId)
   if (!photoId) return null
 
   try {
