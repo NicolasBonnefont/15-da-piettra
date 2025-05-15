@@ -40,11 +40,20 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
       type: "article",
       publishedTime: photo.createdAt.toISOString(),
       authors: photo.user.name ? [photo.user.name] : undefined,
+      images: [
+        {
+          url: photo.url, // URL absoluta da imagem
+          width: 1200,    // ajuste conforme sua imagem
+          height: 630,    // ajuste conforme sua imagem
+          alt: photo.caption || "Foto da festa de 15 anos",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [photo.url], // URL absoluta da imagem
     },
   }
 }
