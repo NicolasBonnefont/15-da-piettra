@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import type React from "react"
 
 import { isHeicImage } from "@/lib/utils"
-import imageCompression from "browser-image-compression"
+import imageCompression, { Options } from "browser-image-compression"
 import { ImagePlus, Loader2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -56,11 +56,11 @@ export function PhotoUploadForm({ onSuccess }: PhotoUploadFormProps) {
         }
 
         // Opções de compressão
-        const options = {
+        const options: Options = {
           maxSizeMB: 5,
           maxWidthOrHeight: 1080,
           useWebWorker: true,
-          quality: 0.9,
+          fileType: 'image/webp',
         }
 
         const compressedFile = await imageCompression(file, options)
