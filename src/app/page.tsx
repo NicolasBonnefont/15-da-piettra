@@ -15,7 +15,7 @@ const playfair = Playfair_Display({ subsets: ["latin"] })
 const dancingScript = Dancing_Script({ subsets: ["latin"] })
 
 // Imagens para o carrossel
-const carouselImages = Array.from({ length: 14 }, (_, i) => `/pi/old-${i + 1}.jpg`)
+const carouselImages = Array.from({ length: 15 }, (_, i) => `/pi/old-${i + 1}.jpg`)
 
 export default async function Home() {
   const session = await getSession()
@@ -176,10 +176,10 @@ export default async function Home() {
           <div className="order-1 md:order-2">
             <div className="h-[500px] rounded-2xl overflow-hidden">
               <ImageShake
-                src="/pi/1.png"
+                src="/pi/pi-1.jpg"
                 alt="Piettra"
                 className="rounded-2xl"
-                interval={7} // A imagem vai chacoalhar a cada 7 segundos
+                interval={1}
               >
                 <div className="absolute inset-0 border-8 border-white z-10 rounded-2xl"></div>
               </ImageShake>

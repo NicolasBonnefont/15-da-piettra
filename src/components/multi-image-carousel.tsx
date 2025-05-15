@@ -6,11 +6,34 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react"
 import Image from "next/image"
 import { useCallback, useEffect, useRef, useState } from "react"
 
+// Hook personalizado para detectar dispositivos móveis
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(false)
+
+  useEffect(() => {
+    // Verificação inicial
+    const media = window.matchMedia(query)
+    setMatches(media.matches)
+
+    // Listener para mudanças
+    const listener = () => setMatches(media.matches)
+    media.addEventListener("change", listener)
+
+    // Limpeza
+    return () => media.removeEventListener("change", listener)
+  }, [query])
+
+  return matches
+}
+
 type CarouselProps = {
   images: string[]
 }
 
 export function MultiImageCarousel({ images }: CarouselProps) {
+  // Detectar se é dispositivo móvel
+  const isMobile = useMediaQuery("(max-width: 640px)")
+
   // Initialize Embla with autoplay options
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
@@ -129,10 +152,11 @@ export function MultiImageCarousel({ images }: CarouselProps) {
                 className="min-w-0 pl-4 flex-[0_0_33.33%] lg:flex-[0_0_33.33%] md:flex-[0_0_33.33%] sm:flex-[0_0_50%] xs:flex-[0_0_100%]"
               >
                 <div
-                  className="relative w-full max-h-[440px] mx-auto cursor-pointer transform transition-transform hover:scale-[1.02] rounded-xl overflow-hidden"
+                  className="relative w-full mx-auto cursor-pointer transform transition-transform hover:scale-[1.02] rounded-xl overflow-hidden"
                   style={{
                     aspectRatio: "3/4",
-                    maxWidth: `${440 * (3 / 4)}px`, // 330px - calculated from max-height and aspect ratio
+                    maxHeight: isMobile ? "520px" : "440px", // Altura maior em dispositivos móveis
+                    maxWidth: isMobile ? "100%" : `${440 * (3 / 4)}px`, // Largura ajustada para manter proporção
                   }}
                   onClick={() => openLightbox(index)}
                 >
