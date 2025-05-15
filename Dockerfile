@@ -25,6 +25,10 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Adicione estas linhas ANTES do prisma generate
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
+
 # Gere o Prisma Client para o ambiente correto
 RUN npx prisma generate
 
