@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import getSession from "@/lib/get-session"
 import { cn } from "@/lib/utils"
-import { Calendar, Clock, MapPin, Shirt, Sparkles } from "lucide-react"
-import { Dancing_Script, Playfair_Display } from "next/font/google"
+import { Calendar, Clock, Heart, MapPin, Shirt, Sparkles } from 'lucide-react'
+import { Dancing_Script, Playfair_Display } from 'next/font/google'
 import Link from "next/link"
 
 import { ImageShake } from "@/components/image-shake"
@@ -36,6 +36,36 @@ export default async function Home() {
         <div className="absolute top-1/3 right-1/4 w-20 h-20 rounded-full bg-pink-300 blur-2xl opacity-10"></div>
         <div className="absolute bottom-1/3 left-1/4 w-24 h-24 rounded-full bg-pink-300 blur-2xl opacity-10"></div>
 
+        {/* Elementos decorativos flutuantes */}
+        <div className="absolute top-1/4 left-1/5 w-20 h-20 text-pink-300 animate-float opacity-20">
+          <Heart className="w-full h-full" />
+        </div>
+        <div className="absolute top-1/3 right-1/5 w-16 h-16 text-pink-400 animate-float-delayed opacity-20">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
+        </div>
+        <div className="absolute bottom-1/4 left-1/3 w-24 h-24 text-pink-200 animate-float-slow opacity-20">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="10" />
+          </svg>
+        </div>
+        <div className="absolute bottom-1/3 right-1/3 w-16 h-16 text-pink-300 animate-float-delayed opacity-20">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21.66,10.25l-9.84-9.64a.51.51,0,0,0-.17-.1.62.62,0,0,0-.19,0,.22.22,0,0,0-.09,0,.59.59,0,0,0-.17.09L2.34,10.25a.75.75,0,0,0,0,1.06.74.74,0,0,0,1.06,0L4,10.75V19.5a2,2,0,0,0,2,2h5.5V16.75a1,1,0,0,1,1-1h1a1,1,0,0,1,1,1V21.5H20a2,2,0,0,0,2-2V10.75l.6.56a.74.74,0,0,0,1.06,0A.75.75,0,0,0,21.66,10.25Z" />
+          </svg>
+        </div>
+        <div className="absolute top-2/3 left-1/6 w-14 h-14 text-pink-300 animate-float-slow opacity-20">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M12,20c-4.41,0-8-3.59-8-8s3.59-8,8-8s8,3.59,8,8 S16.41,20,12,20z M16.59,7.58L10,14.17l-2.59-2.58L6,13l4,4l8-8L16.59,7.58z" />
+          </svg>
+        </div>
+        <div className="absolute top-1/6 right-1/6 w-12 h-12 text-pink-400 animate-float opacity-20">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12,21.35l-1.45-1.32C5.4,15.36,2,12.28,2,8.5C2,5.42,4.42,3,7.5,3c1.74,0,3.41,0.81,4.5,2.09C13.09,3.81,14.76,3,16.5,3 C19.58,3,22,5.42,22,8.5c0,3.78-3.4,6.86-8.55,11.54L12,21.35z" />
+          </svg>
+        </div>
+
         <div className="container relative mx-auto px-6 py-16 text-center z-10">
           <div className="max-w-3xl mx-auto">
             {/* Elemento decorativo superior */}
@@ -57,7 +87,7 @@ export default async function Home() {
                 "text-5xl md:text-6xl lg:text-7xl font-bold text-pink-800 mb-6 leading-tight",
               )}
             >
-              A Festa de 15 Anos da Piettra
+              A Festa de 15 Anos de Piettra
             </h1>
 
             {/* Subtítulo mais envolvente */}
@@ -179,7 +209,7 @@ export default async function Home() {
                 src="/pi/pi-2.jpeg"
                 alt="Piettra"
                 className="rounded-2xl"
-                interval={1}
+                interval={7}
               >
                 <div className="absolute inset-0 border-8 border-white z-10 rounded-2xl"></div>
               </ImageShake>
@@ -228,6 +258,9 @@ export default async function Home() {
           <p className="text-pink-500 text-sm">23 de Maio de 2025</p>
         </div>
       </footer>
+
+      {/* Estilos para animações */}
+     
     </main>
   )
 }
