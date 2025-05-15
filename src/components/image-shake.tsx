@@ -72,7 +72,7 @@ export function ImageShake({ src, alt, className, children, interval = 5 }: Imag
         whileTap={{ scale: 0.98 }}
       >
         {children}
-        <Image src={src || "/placeholder.svg"} alt={alt} fill className="object-cover" />
+        <Image src={src || "/placeholder.svg"} alt={alt} fill className="object-contain" />
       </motion.div>
     </div>
   )

@@ -176,7 +176,7 @@ export default async function Home() {
           <div className="order-1 md:order-2">
             <div className="h-[500px] rounded-2xl overflow-hidden">
               <ImageShake
-                src="/pi/pi-1.jpg"
+                src="/pi/pi-2.jpeg"
                 alt="Piettra"
                 className="rounded-2xl"
                 interval={1}
