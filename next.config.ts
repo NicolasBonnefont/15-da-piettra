@@ -7,7 +7,8 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    remotePatterns: [new URL('http://localhost:9000/**'), new URL("https://minio.srv.bonnefont.com.br/**")],
+    remotePatterns: [new URL('http://localhost:9000/**'),
+    new URL("https://minio-tsk4sos4g4g848w0wgkswk0s.31.97.18.31.sslip.io/**")],
   },
   output: "standalone"
 };
