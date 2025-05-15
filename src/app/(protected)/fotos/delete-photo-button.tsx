@@ -14,10 +14,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import { Download, MoreHorizontal, Share2, Trash2 } from "lucide-react"
+import { MoreHorizontal, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 import { deletePhoto } from "./actions"
@@ -47,23 +46,6 @@ export function DeletePhotoButton({ photoId }: { photoId: string }) {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => document.getElementById(`share-${photoId}`)?.click()}
-        >
-          <Share2 className="mr-2 h-4 w-4" />
-          <span>Compartilhar</span>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => document.getElementById(`download-${photoId}`)?.click()}
-        >
-          <Download className="mr-2 h-4 w-4" />
-          <span>Baixar</span>
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
 
         <AlertDialog>
           <AlertDialogTrigger asChild>

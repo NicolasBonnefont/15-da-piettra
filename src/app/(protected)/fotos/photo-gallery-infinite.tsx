@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatDistanceToNow } from "date-fns"
 import { ptBR } from "date-fns/locale"
-import { Loader2, MessageCircle } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import { getPhotos } from "./actions"
@@ -214,11 +214,8 @@ export function PhotoGalleryInfinite({ initialPhotos, currentUserId, onNewPhoto 
 
           {/* Ações - Curtir, Comentar, Compartilhar */}
           <div className="p-3 pb-0">
-            <div className="flex items-center gap-4 mb-2">
+            <div className="flex w-full justify-between items-center mb-2">
               <LikeButton photoId={photo.id} initialLiked={photo.likedByMe} />
-              <button className="flex items-center gap-1 text-gray-800 hover:text-gray-600 transition-colors">
-                <MessageCircle className="h-6 w-6" />
-              </button>
               <SharePhotoMenu photo={photo} />
             </div>
 
@@ -251,7 +248,7 @@ export function PhotoGalleryInfinite({ initialPhotos, currentUserId, onNewPhoto 
           </div>
 
           {/* Comentários */}
-          <div className="px-3 pb-3 pt-1">
+          <div className="px-3">
             <CommentSection
               photo={photo}
               currentUserId={currentUserId}

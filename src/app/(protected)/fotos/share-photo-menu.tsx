@@ -166,7 +166,7 @@ export function SharePhotoMenu({ photo }: { photo: Photo }) {
 
         <DropdownMenuItem onClick={() => window.open(generateShareUrl("twitter"), "_blank")} className="cursor-pointer">
           <Twitter className="mr-2 h-4 w-4" />
-          <span>Twitter</span>
+          <span>Twitter (X)</span>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />

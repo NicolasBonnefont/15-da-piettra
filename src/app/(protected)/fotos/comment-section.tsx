@@ -207,12 +207,12 @@ export function CommentSection({ photo, currentUserId, onCommentAdded, onComment
 
       {/* Formulário de comentário */}
       {currentUserId && (
-        <form onSubmit={handleSubmit} className="flex gap-2 items-end">
+        <form onSubmit={handleSubmit} className="flex gap-2 items-center justify-center">
           <Textarea
             placeholder="Adicione um comentário..."
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            className="min-h-[60px] text-sm resize-none border-pink-200 focus-visible:ring-pink-400"
+            className="text-sm resize-none border-pink-200 focus-visible:ring-pink-400"
             disabled={isSubmitting}
           />
           <Button
