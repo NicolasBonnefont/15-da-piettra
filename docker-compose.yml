@@ -31,47 +31,10 @@ services:
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
     command: server /data --console-address ":9001"
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "9000:9000" # API S3
+      - "9001:9001" # Console Web
     volumes:
       - minio_data:/data
-    networks:
-      - piettra_network
-
-  minio-init:
-    image: minio/mc:latest
-    depends_on:
-      - minio
-    entrypoint: >
-      /bin/sh -c "
-        sleep 10;
-        mc alias set myminio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
-        mc mb -p myminio/${MINIO_BUCKET_NAME};
-        mc anonymous set download myminio/${MINIO_BUCKET_NAME};
-      "
-    env_file:
-      - .env
-    networks:
-      - piettra_network
-
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: piettra_app
-    restart: always
-    env_file:
-      - .env
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
-      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
-      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-    ports:
-      - "3000:3000"
-    depends_on:
-      - mysql
-      - minio
     networks:
       - piettra_network
 
