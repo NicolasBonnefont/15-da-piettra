@@ -57,7 +57,7 @@ export default async function Home() {
                 "text-5xl md:text-6xl lg:text-7xl font-bold text-pink-800 mb-6 leading-tight",
               )}
             >
-              A Festa de 15 Anos de Piettra
+              A Festa de 15 Anos da Piettra
             </h1>
 
             {/* Subtítulo mais envolvente */}
