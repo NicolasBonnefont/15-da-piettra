@@ -26,7 +26,6 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Gere o Prisma Client para o ambiente correto
-RUN npx prisma migrate deploy
 RUN npx prisma generate
 
 # Next.js collects completely anonymous telemetry data about general usage.
