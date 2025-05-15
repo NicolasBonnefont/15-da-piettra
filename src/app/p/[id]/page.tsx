@@ -2,23 +2,56 @@ import { prisma } from "@/lib/prisma"
 import { cn } from "@/lib/utils"
 import { formatDistanceToNow } from "date-fns"
 import { ptBR } from "date-fns/locale"
-import { ArrowLeft, Calendar, Download } from "lucide-react"
+import { ArrowLeft, Calendar, Download } from 'lucide-react'
 import type { Metadata, ResolvingMetadata } from "next"
-import { Playfair_Display } from "next/font/google"
+import { Playfair_Display } from 'next/font/google'
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
+// Configurações de geração estática
+export const dynamic = 'force-static';
+export const revalidate = 86400; // Revalidar a cada 24 horas
+export const dynamicParams = true; // Permitir fallback para novas fotos
+
 const playfair = Playfair_Display({ subsets: ["latin"] })
+
+// Obter a URL base do ambiente
+const BASE_URL = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
 
 type Props = {
   params: Promise<{ id: string }>
+}
+
+// Gerar parâmetros estáticos para pré-renderização
+export async function generateStaticParams() {
+  // Buscar todos os IDs de fotos do banco de dados
+  const photos = await prisma.photo.findMany({
+    select: { id: true },
+    orderBy: { createdAt: 'desc' },
+    // Opcional: limite o número de fotos pré-renderizadas
+    take: 100, // Pré-renderiza apenas as 100 fotos mais recentes
+  });
+
+  // Retornar um array de objetos com os parâmetros para pré-renderização
+  return photos.map((photo) => ({
+    id: photo.id,
+  }));
+}
+
+// Função para garantir que a URL seja absoluta
+function ensureAbsoluteUrl(url: string): string {
+  if (!url) return `${BASE_URL}/placeholder.svg`;
+  if (url.startsWith("http")) return url;
+
+  return `${BASE_URL}${url.startsWith("/") ? "" : "/"}${url}`;
 }
 
 // Gerar metadados dinâmicos para SEO e compartilhamento
 export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
   const { id } = await params;
   const photo = await getPhoto(id)
+
   if (!photo) {
     return {
       title: "Foto não encontrada - Festa de 15 Anos da Piettra",
@@ -28,12 +61,8 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
 
   const title = photo.caption ? `${photo.caption} - Festa de 15 Anos da Piettra` : "Foto da Festa de 15 Anos da Piettra"
   const description = `Foto compartilhada por ${photo.user.name || "um convidado"} na Festa de 15 Anos da Piettra`
-  const image = {
-    url: photo.url,
-    width: 1200,
-    height: 630,
-    alt: photo.caption || "Foto da festa de 15 anos",
-  }
+  const imageUrl = ensureAbsoluteUrl(photo.url);
+  const pageUrl = `${BASE_URL}/p/${id}`;
 
   return {
     title,
@@ -42,26 +71,59 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
       title,
       description,
       type: "article",
+      url: pageUrl, // URL canônica usando a variável de ambiente
+      siteName: "Festa de 15 Anos da Piettra",
+      locale: "pt_BR",
       publishedTime: photo.createdAt.toISOString(),
       authors: photo.user.name ? [photo.user.name] : undefined,
-      images: [image],
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: photo.caption || "Foto da festa de 15 anos",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [photo.url],
+      images: [imageUrl],
+      creator: "@piettra15anos", // Substitua pelo handle do Twitter
+      site: "@piettra15anos", // Substitua pelo handle do Twitter
     },
-    // Facebook usa as mesmas tags do Open Graph
+    alternates: {
+      canonical: pageUrl,
+      types: {
+        // Pinterest Rich Pins
+        "application/json+oembed": `${BASE_URL}/api/oembed?url=${pageUrl}`,
+      },
+    },
     other: {
-      "fb:app_id": process.env.FACEBOOK_APP_ID || "", // Defina sua App ID do Facebook no .env
-      "og:title": title,
-      "og:description": description,
-      "og:image": photo.url,
+      // Facebook específico
+      "fb:app_id": "123456789", // Substitua pelo seu App ID do Facebook
+
+      // Outros metadados específicos para várias plataformas
       "og:image:width": "1200",
       "og:image:height": "630",
-      "og:type": "article",
-      "og:url": `${process.env.NEXT_PUBLIC_SITE_URL || ""}/p/${photo.id}`,
+      "og:locale": "pt_BR",
+      "og:site_name": "Festa de 15 Anos da Piettra",
+
+      // LinkedIn específico
+      "linkedin:owner": "Piettra15Anos",
+
+      // WhatsApp específico (usa OpenGraph padrão)
+      "og:image:alt": photo.caption || "Foto da festa de 15 anos",
+
+      // Discord específico
+      "theme-color": "#ec4899", // Cor rosa do tema
+
+      // Slack específico
+      "twitter:label1": "Compartilhado por",
+      "twitter:data1": photo.user.name || "Convidado",
+      "twitter:label2": "Data",
+      "twitter:data2": new Date(photo.createdAt).toLocaleDateString("pt-BR"),
     },
   }
 }
@@ -97,17 +159,10 @@ async function getPhoto(photoId: string) {
 
 export default async function PhotoPage({ params }: Props) {
   const { id } = await params
-  console.log('???', id)
   const photo = await getPhoto(id)
 
   if (!photo) {
     notFound()
-  }
-
-  // Função para download da imagem
-  async function downloadImage(url: string) {
-    // Esta função será implementada no cliente
-    return url
   }
 
   return (
