@@ -45,7 +45,6 @@ export function MultiImageCarousel({ images }: CarouselProps) {
   // Carrossel para o lightbox
   const [lightboxRef, lightboxApi] = useEmblaCarousel({
     loop: true,
-    draggable: true,
     align: "center",
   })
 
@@ -297,11 +296,9 @@ export function MultiImageCarousel({ images }: CarouselProps) {
           0%, 100% { opacity: 0.3; }
           50% { opacity: 0.7; }
         }
-        
         .animate-pulse-slow {
           animation: pulse-slow 3s ease-in-out infinite;
         }
-        
         .animation-delay-500 {
           animation-delay: 1.5s;
         }
