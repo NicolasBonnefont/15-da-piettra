@@ -38,6 +38,22 @@ services:
     networks:
       - piettra_network
 
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+        sleep 10;
+        mc alias set myminio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+        mc mb -p myminio/${MINIO_BUCKET_NAME};
+        mc anonymous set download myminio/${MINIO_BUCKET_NAME};
+      "
+    env_file:
+      - .env
+    networks:
+      - piettra_network
+
   app:
     build:
       context: .
