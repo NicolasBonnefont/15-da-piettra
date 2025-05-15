@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import useEmblaCarousel from "embla-carousel-react"
-import { ChevronLeft, ChevronRight, X } from "lucide-react"
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import Image from "next/image"
 import { useCallback, useEffect, useRef, useState } from "react"
 
@@ -42,9 +42,37 @@ export function MultiImageCarousel({ images }: CarouselProps) {
     align: "start",
   })
 
+  // Carrossel para o lightbox
+  const [lightboxRef, lightboxApi] = useEmblaCarousel({
+    loop: true,
+    draggable: true,
+    align: "center",
+  })
+
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentImage, setCurrentImage] = useState(0)
   const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Sincronizar o índice atual com o carrossel do lightbox
+  useEffect(() => {
+    if (lightboxApi && lightboxOpen) {
+      lightboxApi.scrollTo(currentImage)
+    }
+  }, [currentImage, lightboxApi, lightboxOpen])
+
+  // Atualizar o índice atual quando o usuário desliza no lightbox
+  useEffect(() => {
+    if (!lightboxApi) return
+
+    const onSelect = () => {
+      setCurrentImage(lightboxApi.selectedScrollSnap())
+    }
+
+    lightboxApi.on("select", onSelect)
+    return () => {
+      lightboxApi.off("select", onSelect)
+    }
+  }, [lightboxApi])
 
   // Function to start autoplay
   const startAutoplay = useCallback(() => {
@@ -104,6 +132,17 @@ export function MultiImageCarousel({ images }: CarouselProps) {
     if (emblaApi) emblaApi.scrollNext()
   }, [emblaApi])
 
+  // Lightbox navigation functions
+  const lightboxPrev = useCallback(() => {
+    if (lightboxApi) lightboxApi.scrollPrev()
+    else prevImage()
+  }, [lightboxApi])
+
+  const lightboxNext = useCallback(() => {
+    if (lightboxApi) lightboxApi.scrollNext()
+    else nextImage()
+  }, [lightboxApi])
+
   // Open lightbox with specific image
   const openLightbox = (index: number) => {
     setCurrentImage(index)
@@ -119,7 +158,7 @@ export function MultiImageCarousel({ images }: CarouselProps) {
     startAutoplay()
   }
 
-  // Navigate in lightbox
+  // Navigate in lightbox (fallback for when lightboxApi is not available)
   const prevImage = () => setCurrentImage((prev) => (prev === 0 ? images.length - 1 : prev - 1))
   const nextImage = () => setCurrentImage((prev) => (prev === images.length - 1 ? 0 : prev + 1))
 
@@ -177,7 +216,8 @@ export function MultiImageCarousel({ images }: CarouselProps) {
       {/* Lightbox */}
       <Dialog open={lightboxOpen} onOpenChange={handleLightboxClose}>
         <DialogContent className="max-w-screen-lg w-[90vw] h-[90vh] p-0 bg-black/95 border-none">
-          <div className="relative w-full h-full flex items-center justify-center">
+          <div className="relative w-full h-full">
+            {/* Botão de fechar */}
             <button
               className="absolute top-4 right-4 z-50 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors"
               onClick={handleLightboxClose}
@@ -185,42 +225,87 @@ export function MultiImageCarousel({ images }: CarouselProps) {
               <X className="h-6 w-6 text-white" />
             </button>
 
+            {/* Botões de navegação */}
             <button
               className="absolute left-4 top-1/2 -translate-y-1/2 z-50 bg-white/20 p-3 rounded-full hover:bg-white/40 transition-colors"
-              onClick={prevImage}
+              onClick={lightboxPrev}
             >
               <ChevronLeft className="h-6 w-6 text-white" />
             </button>
 
             <button
               className="absolute right-4 top-1/2 -translate-y-1/2 z-50 bg-white/20 p-3 rounded-full hover:bg-white/40 transition-colors"
-              onClick={nextImage}
+              onClick={lightboxNext}
             >
               <ChevronRight className="h-6 w-6 text-white" />
             </button>
 
-            <div className="relative w-full h-full flex items-center justify-center">
-              <Image
-                src={images[currentImage] || "/placeholder.svg"}
-                alt={`Visualização em tela cheia ${currentImage + 1}`}
-                fill
-                className="object-contain"
-              />
+            {/* Indicadores de swipe (visíveis apenas em dispositivos móveis) */}
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none px-4 md:hidden">
+              <div className="bg-white/10 backdrop-blur-sm rounded-full p-2 animate-pulse-slow">
+                <ChevronLeft className="h-6 w-6 text-white/70" />
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-full p-2 animate-pulse-slow animation-delay-500">
+                <ChevronRight className="h-6 w-6 text-white/70" />
+              </div>
             </div>
 
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            {/* Carrossel do lightbox */}
+            <div className="w-full h-full overflow-hidden" ref={lightboxRef}>
+              <div className="flex h-full">
+                {images.map((src, index) => (
+                  <div
+                    key={index}
+                    className="flex-[0_0_100%] min-w-0 h-full flex items-center justify-center"
+                  >
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={src || "/placeholder.svg"}
+                        alt={`Visualização em tela cheia ${index + 1}`}
+                        fill
+                        className="object-contain"
+                        sizes="100vw"
+                        priority={index === currentImage}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Indicadores de página */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-40">
               {images.map((_, index) => (
                 <button
                   key={index}
                   className={`w-2 h-2 rounded-full transition-all ${currentImage === index ? "bg-white w-4" : "bg-white/50"
                     }`}
-                  onClick={() => setCurrentImage(index)}
+                  onClick={() => {
+                    setCurrentImage(index)
+                    if (lightboxApi) lightboxApi.scrollTo(index)
+                  }}
                 />
               ))}
             </div>
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Estilos para animações */}
+      <style jsx global>{`
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.7; }
+        }
+        
+        .animate-pulse-slow {
+          animation: pulse-slow 3s ease-in-out infinite;
+        }
+        
+        .animation-delay-500 {
+          animation-delay: 1.5s;
+        }
+      `}</style>
     </>
   )
 }
