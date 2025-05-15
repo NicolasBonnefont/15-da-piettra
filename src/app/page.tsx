@@ -15,7 +15,7 @@ const playfair = Playfair_Display({ subsets: ["latin"] })
 const dancingScript = Dancing_Script({ subsets: ["latin"] })
 
 // Imagens para o carrossel
-const carouselImages = Array.from({ length: 15 }, (_, i) => `/pi/old-${i + 1}.jpg`)
+const carouselImages = Array.from({ length: 16 }, (_, i) => `/pi/old-${i + 1}.jpg`)
 
 export default async function Home() {
   const session = await getSession()
