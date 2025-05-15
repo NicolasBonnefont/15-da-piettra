@@ -164,20 +164,21 @@ html {
 
 /* Estilo para o "trilho" da barra de rolagem */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;  /* Cor bem clara para o trilho */
+  background: #fdf2f8;  /* pink-50 - fundo bem claro */
   border-radius: 8px;   /* Bordas arredondadas */
 }
 
 /* Estilo para o "polegar" da barra de rolagem (a parte que se move) */
 ::-webkit-scrollbar-thumb {
-  background: #e2e2e2;  /* Cor bem clara para o polegar */
+  background: linear-gradient(to right, #ec4899, #db2777);  /* Gradiente de pink-500 para pink-600 */
   border-radius: 8px;   /* Bordas arredondadas */
-  border: 2px solid #f1f1f1; /* Borda para dar um efeito de profundidade sutil */
+  border: 2px solid #fdf2f8; /* Borda usando pink-50 */
+  transition: background 0.3s ease;
 }
 
 /* Estilo para o polegar quando hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #d1d1d1;  /* Um pouco mais escuro no hover */
+  background: linear-gradient(to right, #db2777, #be185d);  /* Gradiente de pink-600 para pink-700 */
 }
 
 /* Estilo para a área dos botões de rolagem (opcional) */
@@ -188,6 +189,12 @@ html {
 /* Versão para Firefox */
 * {
   scrollbar-width: thin;  /* "auto" ou "thin" */
-  scrollbar-color: #e2e2e2 #f1f1f1;  /* polegar e trilho */
+  scrollbar-color: #ec4899 #fdf2f8;  /* pink-500 e pink-50 */
+}
+
+/* Estilo para scroll no Dialog/Modal */
+.dialog-content {
+  max-height: 80vh;
+  overflow-y: auto;
 }
 

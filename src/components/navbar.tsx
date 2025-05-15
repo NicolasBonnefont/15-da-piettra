@@ -22,7 +22,7 @@ export async function Navbar() {
   const session = await getSession()
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/80 border-b border-pink-100">
+    <header className="fixed top-0 z-50 w-full backdrop-blur-md bg-white/80 border-b border-pink-100">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <div className="flex-1 flex justify-start">
