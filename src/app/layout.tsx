@@ -2,6 +2,7 @@ import { BackToTop } from "@/components/back-to-top"
 import { Navbar } from "@/components/navbar"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import Script from "next/script"
 import type React from "react"
 import { Toaster } from "sonner"
 import "./globals.css"
@@ -43,6 +44,11 @@ export default function RootLayout({
         {children}
         <BackToTop />
         <Toaster position="top-center" />
+        <Script
+          defer
+          src="http://umami-vo0o4kokcscg80s0ggo08480.31.97.18.31.sslip.io/script.js"
+          data-website-id="6bad5060-28d9-4c7d-9b3c-232b627baabf"
+        />
       </body>
     </html>
   )
