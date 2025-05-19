@@ -42,7 +42,7 @@ export default async function Dashboard() {
           </div>
 
           <div className={cn(dancingScript.className, "text-2xl text-pink-600 mb-2")}>
-            Bem-vindo(a), {session.user?.name?.split(' ')[0] || 'Convidado(a)'}!
+            Bem-vindo(a), {session!.user?.name?.split(' ')[0] || 'Convidado(a)'}!
           </div>
 
           <h1 className={cn(playfair.className, "text-4xl md:text-5xl font-bold text-pink-800 mb-6")}>
