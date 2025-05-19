@@ -115,23 +115,13 @@ export default async function Home() {
             {/* Botões de ação refinados */}
             <div className="flex flex-col sm:flex-row justify-center gap-5 mt-12">
               {session ? (
-                <>
-                  <Button
-                    asChild
-                    size="lg"
-                    className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 rounded-full px-10 py-6 shadow-md hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px] border-none text-base"
-                  >
-                    <Link href="/mural">Deixe sua Mensagem</Link>
-                  </Button>
-                  <Button
-                    asChild
-                    size="lg"
-                    variant="outline"
-                    className="border-2 border-pink-500 text-pink-600 hover:bg-pink-50 rounded-full px-10 py-6 shadow-sm hover:shadow transition-all duration-300 hover:translate-y-[-2px] text-base"
-                  >
-                    <Link href="/fotos">Ver a Galeria de Fotos</Link>
-                  </Button>
-                </>
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 rounded-full px-10 py-6 shadow-md hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px] border-none text-base"
+                >
+                  <Link href="/menu">Menu</Link>
+                </Button>
               ) : (
                 <div className="transform hover:scale-105 transition-transform duration-300 mx-auto">
                   <LoginButton />
@@ -260,7 +250,7 @@ export default async function Home() {
       </footer>
 
       {/* Estilos para animações */}
-     
+
     </main>
   )
 }

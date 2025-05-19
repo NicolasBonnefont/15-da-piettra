@@ -1,3 +1,4 @@
+import Container from "@/components/container";
 import getSession from "@/lib/get-session";
 import { redirect } from "next/navigation";
 
@@ -12,7 +13,9 @@ export default async function Layout({
   }
   return (
     <>
-      {children}
+      <Container>
+        {children}
+      </Container>
     </>
   );
 }

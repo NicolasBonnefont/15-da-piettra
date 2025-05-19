@@ -99,6 +99,16 @@ export async function Navbar() {
                             <span>Mural</span>
                           </Link>
                         </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <a
+                            href="/cardapio.jpeg"
+                            download
+                            className="cursor-pointer flex items-center gap-2"
+                          >
+                            <span role="img" aria-label="Download">📄</span>
+                            <span>Baixar Cardápio</span>
+                          </a>
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
                       </div>
 
