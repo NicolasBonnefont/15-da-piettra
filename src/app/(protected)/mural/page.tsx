@@ -8,7 +8,7 @@ const playfair = Playfair_Display({ subsets: ["latin"] })
 export default async function MuralPage() {
   return (
     <main className="container mx-auto py-10 px-4">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto mt-4">
         {/* Cabeçalho com estilo elegante */}
         <div className="text-center mb-12">
           <div className="mb-4 flex justify-center">
