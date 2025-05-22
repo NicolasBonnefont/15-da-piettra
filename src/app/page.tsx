@@ -170,7 +170,7 @@ export default async function Home() {
                     </div>
                     <h3 className="font-semibold text-pink-700">Horário</h3>
                   </div>
-                  <p className="text-gray-700 pl-11">19:00 - 02:00</p>
+                  <p className="text-gray-700 pl-11">20:30 - 02:00</p>
                 </div>
                 <div className="bg-white bg-opacity-70 backdrop-blur-sm p-6 rounded-xl shadow-md border border-pink-100 transform transition-transform duration-300 hover:translate-y-[-5px]">
                   <div className="flex items-center mb-2">
