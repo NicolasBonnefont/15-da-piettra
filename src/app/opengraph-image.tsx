@@ -110,7 +110,7 @@ export default async function OGImage() {
               margin: 0,
             }}
           >
-            23 de Maio de 2025 • 19:00
+            23 de Maio de 2025 • 20:30
           </p>
         </div>
       </div>
