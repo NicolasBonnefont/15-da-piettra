@@ -26,7 +26,7 @@ export default function RootLayout({
       <link rel="shortcut icon" href="/favicon.ico" />
       <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
       <meta name="apple-mobile-web-app-title" content="MyWebSite" />
-      <link rel="manifest" href="/manifest.webmanifest" />
+      {/* <link rel="manifest" href="/manifest.webmanifest" /> */}
       <body className={inter.className}>
         <Navbar />
         {children}
